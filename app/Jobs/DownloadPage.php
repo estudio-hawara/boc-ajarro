@@ -20,6 +20,14 @@ class DownloadPage implements ShouldQueue
     }
 
     /**
+     * Get the URL of the page downloaded.
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
      * Execute the job.
      */
     public function handle(): void

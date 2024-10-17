@@ -8,7 +8,7 @@ test('single pages can be downloaded', function () {
     // Prepare
     $url = 'http://localhost';
     $content = '<html></html>';
-    Http::fake(fn() => Http::response($content, 200));
+    Http::fake(fn () => Http::response($content, 200));
 
     // Act
     (new DownloadPage($url))->handle();
@@ -25,7 +25,7 @@ test('errors during download are managed', function () {
     // Prepare
     $url = 'http://localhost';
     $content = '<html></html>';
-    Http::fake(fn() => Http::response($content, 500));
+    Http::fake(fn () => Http::response($content, 500));
 
     // Act
     (new DownloadPage($url))->handle();

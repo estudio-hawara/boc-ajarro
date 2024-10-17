@@ -37,7 +37,23 @@ composer install
 php artisan schedule:list
 ```
 
-> 0 0 \* \* \* App\Jobs\DownloadPage ......... Next Due: 1 hour from now
+> 0 0 \* \* \* App\Jobs\Boc\DownloadArchives ......... Next Due: 1 hour from now
+
+### Tests
+
+**Boc·ajarro** dispone de un comando para lanzar los tests automatizados:
+
+```bash
+./vendor/bin/pest --coverage
+```
+
+### Estilo de código
+
+**Boc·ajarro** también dispone de un comando para corregir errores de estilo en el código:
+
+```bash
+./vendor/bin/pint
+```
 
 ### Licencia
 
