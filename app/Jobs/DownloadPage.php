@@ -28,7 +28,7 @@ class DownloadPage implements ShouldQueue
 
         if (! $response->successful()) {
             $this->fail(
-                (new \DateTime())->format('yyyy-mm-dd hh:ii:ss').
+                (new \DateTime)->format('yyyy-mm-dd hh:ii:ss').
                 "Could't download this page: {$this->url}."
             );
         }
