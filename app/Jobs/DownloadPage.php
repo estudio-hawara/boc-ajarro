@@ -31,6 +31,8 @@ class DownloadPage implements ShouldQueue
                 (new \DateTime)->format('yyyy-mm-dd hh:ii:ss').
                 "Could't download this page: {$this->url}."
             );
+
+            return;
         }
 
         Page::create([
