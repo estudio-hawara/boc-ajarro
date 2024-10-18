@@ -1,6 +1,6 @@
 <?php
 
-use App\Jobs\Boc\DownloadArchives;
+use App\Jobs\Boc\DownloadArchive;
 use Illuminate\Support\Facades\Schedule;
 
-Schedule::job(new DownloadArchives)->daily();
+Schedule::job(new DownloadArchive)->daily();

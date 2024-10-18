@@ -31,8 +31,9 @@ class PageResource extends Resource
                     })
                     ->limit(150),
                 Tables\Columns\TextColumn::make('length')
-                    ->state(fn (Page $record): string => mb_strlen($record))
-                    ->formatStateUsing(fn (string $state): string => number_format($state, 0, ',', '.'))
+                    ->state(fn (Page $record): string => mb_strlen($record->content))
+                    ->numeric()
+                    ->alignRight()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -51,6 +52,26 @@ class PageResource extends Resource
                                 fn (Builder $query, $name): Builder => $query->whereName($name),
                             );
                     }),
+                Tables\Filters\Filter::make('created_at')
+                    ->form([
+                        Forms\Components\DatePicker::make('date_from')
+                            ->native(false)
+                            ->displayFormat('d/m/Y'),
+                        Forms\Components\DatePicker::make('date_to')
+                            ->native(false)
+                            ->displayFormat('d/m/Y'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['date_from'],
+                                fn (Builder $query, $dateFrom): Builder => $query->where('created_at', '>=', $dateFrom),
+                            )
+                            ->when(
+                                $data['date_to'],
+                                fn (Builder $query, $dateTo): Builder => $query->where('created_at', '<=', $dateTo),
+                            );
+                    }),
             ])
             ->defaultSort('created_at', 'desc');
     }
@@ -66,6 +87,7 @@ class PageResource extends Resource
     {
         return [
             'index' => Pages\ListPages::route('/'),
+            'view' => Pages\ViewPage::route('/{record}'),
         ];
     }
 }

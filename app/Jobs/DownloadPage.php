@@ -16,7 +16,7 @@ class DownloadPage implements ShouldQueue
      */
     public function __construct(
         protected string $url,
-        protected ?string $name = null,
+        protected string $name,
     ) {
         //
     }
@@ -45,10 +45,23 @@ class DownloadPage implements ShouldQueue
             return;
         }
 
-        Page::create([
-            'name' => $this->name ?? $this->url,
-            'content' => $response->body(),
+        $page = [
+            'name' => $this->name,
             'created_at' => \Carbon\Carbon::now(),
-        ]);
+        ];
+
+        $previousPage = Page::select('id', 'content')
+            ->whereNotNull('content')
+            ->where('name', '=', $this->name)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if (! $previousPage || $previousPage['content'] != $response->body()) {
+            $page['content'] = $response->body();
+        } else {
+            $page['shared_content_with_page_id'] = $previousPage['id'];
+        }
+
+        Page::create($page);
     }
 }

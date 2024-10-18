@@ -44,8 +44,39 @@ php artisan schedule:list
 ```
 
 ```
-0 0 \* \* \* App\Jobs\Boc\DownloadArchives ......... Next Due: 1 hour from now
+0 0 \* \* \* App\Jobs\Boc\DownloadArchive ......... Next Due: 1 hour from now
 ```
+
+#### Descarga de archivos
+
+El [Boletín Oficial de Canarias](https://www.gobiernodecanarias.org/boc/) tiene una página, llamada el [Archivo de boletines](https://www.gobiernodecanarias.org/boc/archivo/) que contiene enlaces a cada uno de los años en los que se ha publicado algún boletín.
+
+El trabajo [DownloadArchive](app/Jobs/Boc/DownloadArchive.php) se encarga de descargar esta página y guardar su contenido sin procesar en la tabla `page`. Los datos que se guardan son:
+
+-   `id` identificador único de la descarga.
+-   `name` nombre del recurso descargado (en este caso: **Archive**).
+-   `content` el HTML descargado.
+-   `created_at` la fecha y hora en la que se realizó la descarga.
+
+Este proceso puede ejecutarse manualmente lanzando:
+
+```php
+# php artisan tinker
+App\Jobs\Boc\DownloadArchive::dispatch()->handle();
+```
+
+#### Comprobación de unicidad
+
+Páginas como el archivo no cambian a menudo por lo que es de esperar que muchas de las veces que la descarguemos, obtengamos los mismos datos.
+
+Para mantener controlado el tamaño de la base de datos, durante la descarga de páginas se comprueba si el contenido descargado es idéntico al último y, de ser así, vincula ambas descargas dejando vacío el campo contenido de la nueva.
+
+> [!NOTE]
+> El vínculo entre dos registros se hace únicamente si son contiguos. Es decir, si no hay más registros del mismo tipo entre medias con diferente contenido.
+
+El campo que se utiliza para el vínculo es:
+
+-   `shared_content_with_page_id` que contiene el identificador de la siguiente descarga del mismo tipo en la que se encontró el mismo contenido.
 
 ### Tests
 

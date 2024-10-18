@@ -25,11 +25,12 @@ test('single pages can be downloaded', function () {
 test('errors during download are managed', function () {
     // Prepare
     $url = 'http://localhost';
+    $name = 'Archive';
     $content = '<html></html>';
     Http::fake(fn () => Http::response($content, 500));
 
     // Act
-    (new DownloadPage($url))->handle();
+    (new DownloadPage($url, $name))->handle();
 
     // Assert
     $pageExists = Page::whereUrl($url)
