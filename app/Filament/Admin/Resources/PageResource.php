@@ -21,25 +21,33 @@ class PageResource extends Resource
     {
         return $table
             ->columns([
+
+                Tables\Columns\TextColumn::make('id'),
+
                 Tables\Columns\TextColumn::make('name')
                     ->url(fn (Page $record): string => BocUrl::{$record->name}->value)
                     ->sortable()
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('content')
                     ->formatStateUsing(function (string $state) {
                         return strip_tags($state);
                     })
                     ->limit(150),
+
                 Tables\Columns\TextColumn::make('length')
-                    ->state(fn (Page $record): string => mb_strlen($record->content))
+                    ->state(fn (Page $record): string => $record->content ? mb_strlen($record->content): 0)
                     ->numeric()
                     ->alignRight()
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
+
             ])
             ->filters([
+
                 Tables\Filters\Filter::make('name')
                     ->form([
                         Forms\Components\Select::make('name')
@@ -52,6 +60,7 @@ class PageResource extends Resource
                                 fn (Builder $query, $name): Builder => $query->whereName($name),
                             );
                     }),
+
                 Tables\Filters\Filter::make('created_at')
                     ->form([
                         Forms\Components\DatePicker::make('date_from')
@@ -72,6 +81,7 @@ class PageResource extends Resource
                                 fn (Builder $query, $dateTo): Builder => $query->where('created_at', '<=', $dateTo),
                             );
                     }),
+
             ])
             ->defaultSort('created_at', 'desc');
     }
