@@ -7,14 +7,15 @@ use Illuminate\Support\Facades\Http;
 test('single pages can be downloaded', function () {
     // Prepare
     $url = 'http://localhost';
+    $name = 'empty-page';
     $content = '<html></html>';
     Http::fake(fn () => Http::response($content, 200));
 
     // Act
-    (new DownloadPage($url))->handle();
+    (new DownloadPage($url, $name))->handle();
 
     // Assert
-    $page = Page::whereUrl($url)
+    $page = Page::whereName($name)
         ->get()
         ->first();
 

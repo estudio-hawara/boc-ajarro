@@ -11,12 +11,14 @@ class Page extends Model
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = ['created_at'];
+
+    const UPDATED_AT = null;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['url', 'content'];
+    protected $fillable = ['name', 'content'];
 }

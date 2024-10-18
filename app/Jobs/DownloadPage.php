@@ -14,8 +14,10 @@ class DownloadPage implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(protected string $url)
-    {
+    public function __construct(
+        protected string $url,
+        protected ?string $name = null,
+    ) {
         //
     }
 
@@ -44,8 +46,9 @@ class DownloadPage implements ShouldQueue
         }
 
         Page::create([
-            'url' => $this->url,
+            'name' => $this->name ?? $this->url,
             'content' => $response->body(),
+            'created_at' => \Carbon\Carbon::now(),
         ]);
     }
 }

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->string('url');
+            $table->string('name');
             $table->longText('content');
-            $table->timestamp('downloaded_at')->useCurrent();
-            $table->index(['url', 'downloaded_at']);
+            $table->timestamp('created_at')->useCurrent();
+            $table->index(['name', 'created_at']);
         });
     }
 
