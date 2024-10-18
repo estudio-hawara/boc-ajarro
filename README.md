@@ -8,7 +8,13 @@
 
 Los procesos que se ejecutan más tarde sobre los datos descargados, crean nuevos registros en tablas específicas para datos procesados, sin modificar en ningún momento lo descargado.
 
+#### Reejecuciones parciales
+
 Esto facilita que en caso de fallo, o de mejora de los algoritmos de procesamiento, no sea necesaria una nueva ejecución entera del proceso, pudiendo ejecutarse solo las partes que hayan cambiado.
+
+#### Auditorías a posterior
+
+Además de facilitar las reejecuciones de los procesos en caso de fallo, la no destructividad también facilita la auditoría de los procesos, al poder comprobarse los mismos desde su entrada original de datos.
 
 ### Desarrollo
 
@@ -37,7 +43,9 @@ composer install
 php artisan schedule:list
 ```
 
-> 0 0 \* \* \* App\Jobs\Boc\DownloadArchives ......... Next Due: 1 hour from now
+```
+0 0 \* \* \* App\Jobs\Boc\DownloadArchives ......... Next Due: 1 hour from now
+```
 
 ### Tests
 
