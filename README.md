@@ -35,6 +35,12 @@ cd boc-ajarro
 composer install
 ```
 
+Para iniciar una sesión de desarrollo, lanza:
+
+```bash
+composer run dev
+```
+
 ### Tareas programadas
 
 **Boc·ajarro** se apoya en tareas programadas que pueden consultarse con:
@@ -44,7 +50,7 @@ php artisan schedule:list
 ```
 
 ```
-0 0 \* \* \* App\Jobs\Boc\DownloadArchive ......... Next Due: 1 hour from now
+0 0 \* \* \* App\Jobs\Boc\DownloadArchive ............... Next Due: 1 hour from now
 ```
 
 #### Descarga de archivos
@@ -61,7 +67,6 @@ El trabajo [DownloadArchive](app/Jobs/Boc/DownloadArchive.php) se encarga de des
 Este proceso puede ejecutarse manualmente lanzando:
 
 ```php
-# php artisan tinker
 App\Jobs\Boc\DownloadArchive::dispatch()->handle();
 ```
 
