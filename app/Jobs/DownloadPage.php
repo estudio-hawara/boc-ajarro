@@ -47,12 +47,14 @@ class DownloadPage implements ShouldQueue
 
         $page = [
             'name' => $this->name,
+            'url' => $this->url,
             'created_at' => \Carbon\Carbon::now(),
         ];
 
         $previousPage = Page::select('id', 'content')
             ->whereNotNull('content')
-            ->where('name', '=', $this->name)
+            ->whereName($this->name)
+            ->whereUrl($this->url)
             ->orderBy('created_at', 'desc')
             ->first();
 

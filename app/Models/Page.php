@@ -21,7 +21,9 @@ class Page extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'shared_content_with_page_id', 'content'];
+    protected $fillable = ['name', 'url', 'shared_content_with_page_id', 'content'];
+
+    // @codeCoverageIgnoreStart
 
     /**
      * The page content was already found in another download.
@@ -30,6 +32,8 @@ class Page extends Model
     {
         return $this->hasOne(static::class, 'id', 'shared_content_with_page_id');
     }
+
+    // @codeCoverageIgnoreEnd
 
     /**
      * Return the page content.

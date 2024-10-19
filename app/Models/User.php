@@ -33,12 +33,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    // @codeCoverageIgnoreStart
+
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    // @codeCoverageIgnoreStart
     protected function casts(): array
     {
         return [
@@ -46,5 +47,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     // @codeCoverageIgnoreEnd
 }
