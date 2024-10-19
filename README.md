@@ -1,30 +1,22 @@
-## Boc·ajarro
+# Boc·ajarro
 
 **Boc·ajarro** es una aplicación que facilita la gestión de la descarga del Boletín Oficial de Canarias y el procesamiento de los datos descargados para su análisis y estudio.
 
-### Procesos no destructivos
+## Procesos no destructivos
 
 **Boc·ajarro** separa la descarga del procesamiento de los datos. Cuando se descarga contenido de una página, los datos se guardan exactamente como fueron descargados.
 
 Los procesos que se ejecutan más tarde sobre los datos descargados, crean nuevos registros en tablas específicas para datos procesados, sin modificar en ningún momento lo descargado.
 
-#### Reejecuciones parciales
+### Reejecuciones parciales
 
 Esto facilita que en caso de fallo, o de mejora de los algoritmos de procesamiento, no sea necesaria una nueva ejecución entera del proceso, pudiendo ejecutarse solo las partes que hayan cambiado.
 
-#### Auditorías a posterior
+### Auditorías a posterior
 
 Además de facilitar las reejecuciones de los procesos en caso de fallo, la no destructividad también facilita la auditoría de los procesos, al poder comprobarse los mismos desde su entrada original de datos.
 
-### Desarrollo
-
-**Boc·ajarro**:
-
--   es una aplicación [Laravel](https://laravel.com)
--   revisa el estilo del código utilizando [Pint](https://laravel.com/docs/11.x/pint)
--   testea el código utilizando [Pest](https://pestphp.com)
-
-### Instalación
+## Instalación
 
 **Boc·ajarro** se instala como una aplicación **Laravel** estándar:
 
@@ -41,19 +33,9 @@ Para iniciar una sesión de desarrollo, lanza:
 composer run dev
 ```
 
-### Tareas programadas
+## Documentación
 
-**Boc·ajarro** se apoya en tareas programadas que pueden consultarse con:
-
-```bash
-php artisan schedule:list
-```
-
-```
-0 0 \* \* \* App\Jobs\Boc\DownloadArchive ............... Next Due: 1 hour from now
-```
-
-#### Descarga de archivos
+### Descarga de archivos
 
 El [Boletín Oficial de Canarias](https://www.gobiernodecanarias.org/boc/) tiene una página, llamada el [Archivo de boletines](https://www.gobiernodecanarias.org/boc/archivo/) que contiene enlaces a cada uno de los años en los que se ha publicado algún boletín.
 
@@ -82,6 +64,26 @@ Para mantener controlado el tamaño de la base de datos, durante la descarga de 
 El campo que se utiliza para el vínculo es:
 
 -   `shared_content_with_page_id` que contiene el identificador de la siguiente descarga del mismo tipo en la que se encontró el mismo contenido.
+
+## Desarrollo
+
+**Boc·ajarro**:
+
+-   es una aplicación [Laravel](https://laravel.com)
+-   revisa el estilo del código utilizando [Pint](https://laravel.com/docs/11.x/pint)
+-   testea el código utilizando [Pest](https://pestphp.com)
+
+## Tareas programadas
+
+**Boc·ajarro** se apoya en tareas programadas que pueden consultarse con:
+
+```bash
+php artisan schedule:list
+```
+
+```
+0 0 \* \* \* App\Jobs\Boc\DownloadArchive ............... Next Due: 1 hour from now
+```
 
 ### Tests
 
