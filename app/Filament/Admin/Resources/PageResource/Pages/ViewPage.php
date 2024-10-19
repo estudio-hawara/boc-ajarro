@@ -20,7 +20,15 @@ class ViewPage extends ViewRecord
                 Infolists\Components\TextEntry::make('name')
                     ->url(fn (Page $record): string => BocUrl::{$record->name}->value),
 
+                Infolists\Components\TextEntry::make('length')
+                    ->state(fn (Page $record): string => mb_strlen($record->getContent()))
+                    ->numeric(),
+
+                Infolists\Components\TextEntry::make('created_at')
+                    ->datetime(),
+
                 Infolists\Components\TextEntry::make('shared_content_with_page_id')
+                    ->label('Shared content with')
                     ->getStateUsing(function (Page $record) {
                         return strip_tags($record->pageWithSharedContent->created_at);
                     })
@@ -36,9 +44,6 @@ class ViewPage extends ViewRecord
                         );
                     }),
 
-                Infolists\Components\TextEntry::make('created_at')
-                    ->datetime(),
-
                 Infolists\Components\TextEntry::make('content')
                     ->getStateUsing(function (Page $record) {
                         return strip_tags($record->getContent());
@@ -50,6 +55,6 @@ class ViewPage extends ViewRecord
                     ->copyable()
                     ->copyMessage('Copied!'),
 
-            ])->columns(3);
+            ])->columns(4);
     }
 }

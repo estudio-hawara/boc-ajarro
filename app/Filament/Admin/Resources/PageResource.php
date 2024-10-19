@@ -33,10 +33,10 @@ class PageResource extends Resource
                     ->getStateUsing(function (Page $record) {
                         return strip_tags($record->getContent());
                     })
-                    ->limit(150),
+                    ->limit(100),
 
                 Tables\Columns\TextColumn::make('length')
-                    ->state(fn (Page $record): string => $record->content ? mb_strlen($record->content): 0)
+                    ->state(fn (Page $record): string => mb_strlen($record->getContent()))
                     ->numeric()
                     ->alignRight()
                     ->sortable(),
@@ -44,6 +44,13 @@ class PageResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('shared_content_with_page_id')
+                    ->label('Shared content with')
+                    ->getStateUsing(function (Page $record) {
+                        return strip_tags($record?->pageWithSharedContent?->created_at ?? '');
+                    })
+                    ->datetime(),
 
             ])
             ->filters([
