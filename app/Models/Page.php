@@ -30,4 +30,12 @@ class Page extends Model
     {
         return $this->hasOne(static::class, 'id', 'shared_content_with_page_id');
     }
+
+    /**
+     * Return the page content.
+     */
+    public function getContent(): string
+    {
+        return $this?->content ?? $this->pageWithSharedContent->content;
+    }
 }

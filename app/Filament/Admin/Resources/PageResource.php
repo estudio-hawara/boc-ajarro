@@ -30,8 +30,8 @@ class PageResource extends Resource
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('content')
-                    ->formatStateUsing(function (string $state) {
-                        return strip_tags($state);
+                    ->getStateUsing(function (Page $record) {
+                        return strip_tags($record->getContent());
                     })
                     ->limit(150),
 

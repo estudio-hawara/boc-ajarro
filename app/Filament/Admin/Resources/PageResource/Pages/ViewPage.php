@@ -21,6 +21,10 @@ class ViewPage extends ViewRecord
                     ->url(fn (Page $record): string => BocUrl::{$record->name}->value),
 
                 Infolists\Components\TextEntry::make('shared_content_with_page_id')
+                    ->getStateUsing(function (Page $record) {
+                        return strip_tags($record->pageWithSharedContent->created_at);
+                    })
+                    ->datetime()
                     ->url(function (Page $record): string {
                         if (! $record?->pageWithSharedContent) {
                             return '';
@@ -36,8 +40,10 @@ class ViewPage extends ViewRecord
                     ->datetime(),
 
                 Infolists\Components\TextEntry::make('content')
+                    ->getStateUsing(function (Page $record) {
+                        return strip_tags($record->getContent());
+                    })
                     ->columnSpanFull()
-                    ->hidden(fn (Page $record): bool => ! $record->content)
                     ->helperText('Click to copy')
                     ->lineClamp(10)
                     ->color('gray')
