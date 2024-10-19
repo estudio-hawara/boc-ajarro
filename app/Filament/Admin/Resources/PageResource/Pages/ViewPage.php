@@ -30,7 +30,7 @@ class ViewPage extends ViewRecord
                 Infolists\Components\TextEntry::make('shared_content_with_page_id')
                     ->label('Shared content with')
                     ->getStateUsing(function (Page $record) {
-                        return strip_tags($record->pageWithSharedContent->created_at);
+                        return strip_tags($record?->pageWithSharedContent?->created_at);
                     })
                     ->datetime()
                     ->url(function (Page $record): string {
