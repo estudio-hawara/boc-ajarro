@@ -13,8 +13,9 @@ class DownloadArchive extends DownloadPage
     public function __construct()
     {
         parent::__construct(
-            BocUrl::Archive->value,
-            BocUrl::Archive->name
+            url: BocUrl::Archive->value,
+            name: BocUrl::Archive->name,
+            root: BocUrl::Root->value
         );
     }
 }

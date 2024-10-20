@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\PageModel\Relationships;
+use App\Models\LinkModel\Relationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Page extends Model
+class Link extends Model
 {
-    /** @use HasFactory<\Database\Factories\PageFactory> */
+    /** @use HasFactory<\Database\Factories\LinkFactory> */
     use HasFactory;
     use Relationships;
 
@@ -26,13 +26,13 @@ class Page extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'url', 'shared_content_with_page_id', 'content'];
+    protected $fillable = ['page_id', 'url'];
 
     /**
      * Return the page content.
      */
     public function getContent(): string
     {
-        return $this?->content ?? $this->pageWithSharedContent->content;
+        return $this?->page?->content;
     }
 }

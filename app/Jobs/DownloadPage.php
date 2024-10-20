@@ -3,22 +3,21 @@
 namespace App\Jobs;
 
 use App\Models\Page;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
 
-class DownloadPage implements ShouldQueue
+class DownloadPage extends AbstractJob
 {
-    use Queueable;
-
     /**
      * Create a new job instance.
      */
     public function __construct(
         protected string $url,
         protected string $name,
+        protected ?string $root = null
     ) {
-        //
+        if (! $root) {
+            $this->root = $url;
+        }
     }
 
     /**
@@ -37,10 +36,7 @@ class DownloadPage implements ShouldQueue
         $response = Http::get($this->url);
 
         if (! $response->successful()) {
-            $this->fail(
-                (new \DateTime)->format('yyyy-mm-dd hh:ii:ss').
-                "Could't download this page: {$this->url}."
-            );
+            $this->logAndFail("Could't download this page: {$this->url}.");
 
             return;
         }
@@ -58,12 +54,22 @@ class DownloadPage implements ShouldQueue
             ->orderBy('created_at', 'desc')
             ->first();
 
+        $extractLinks = false;
+
         if (! $previousPage || $previousPage['content'] != $response->body()) {
             $page['content'] = $response->body();
+            $extractLinks = true;
         } else {
             $page['shared_content_with_page_id'] = $previousPage['id'];
         }
 
-        Page::create($page);
+        $created = Page::create($page);
+
+        if ($extractLinks) {
+            ExtractPageLinks::dispatch(
+                pageId: $created->id,
+                root: $this->root,
+            );
+        }
     }
 }

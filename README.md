@@ -65,6 +65,10 @@ El campo que se utiliza para el vínculo es:
 
 -   `shared_content_with_page_id` que contiene el identificador de la siguiente descarga del mismo tipo en la que se encontró el mismo contenido.
 
+#### Extracción de enlaces
+
+Una vez descargada la página que contiene la lista de años para los que se han publicado boletines, obtenemos la lista con esos enlaces.
+
 ## Desarrollo
 
 **Boc·ajarro**:

@@ -40,7 +40,7 @@ test('errors during download are managed', function () {
     expect($pageExists)->toBe(false);
 });
 
-test("page content isn\'t stored if it's like the previous one of the same type and url", function() {
+test("page content isn't stored if it's like the previous one of the same type and url", function() {
     // Prepare
     $url = 'http://localhost';
     $name = 'empty-page';

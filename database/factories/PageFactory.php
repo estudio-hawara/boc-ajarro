@@ -20,9 +20,9 @@ class PageFactory extends Factory
         $name = fake()->randomElement(array_column(BocUrl::cases(), 'name'));
 
         return [
-            'name' => fake()->randomElement(array_column(BocUrl::cases(), 'name')),
+            'name' => $name,
             'url' => BocUrl::{$name}->value,
-            'content' => '<html>'.fake()->paragraph().'</html>',
+            'content' => fake()->randomHtml(),
             'created_at' => \Carbon\Carbon::now(),
         ];
     }
