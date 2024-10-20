@@ -80,9 +80,9 @@ Los enlaces descargados se guardan en la tabla `link`, donde se guardan estos ca
 
 ### Descarga de índices anuales
 
-Para cada año en que se ha publicado algún boletín, hay un índice con cada uno de los boletines. El índice empieza en [1980](https://www.gobiernodecanarias.org/boc/archivo/1980/) cuando solo se publicaron cuatro boletines.
+Para cada año en que se ha publicado algún boletín, hay un índice con cada uno de los boletines. El índice empieza en [1980](https://www.gobiernodecanarias.org/boc/archivo/1980/), cuando solo se publicaron cuatro boletines.
 
-El trabajo [DownloadYearIndex](app/Jobs/Boc/DownloadYearIndex.php) se encarga de descargar el contenido de esos índices y guardarlo sin procesar en la tabla `page`.
+El trabajo [DownloadYearIndex](app/Jobs/Boc/DownloadYearIndex.php) se encarga de descargar el contenido de esos índices y guardarlo sin procesar en la tabla `page`. Si durante la descarga encuentra contenido nuevo, dispara la correspondiente extracción de enlaces.
 
 Este proceso puede ejecutarse manualmente lanzando:
 
@@ -90,13 +90,17 @@ Este proceso puede ejecutarse manualmente lanzando:
 App\Jobs\Boc\DownloadYearIndex::dispatch(1980)->handle();
 ```
 
+#### Extracción de enlaces
+
+El trabajo [ExtractYearIndexLinks](app/Jobs/Boc/ExtractYearIndexLinks.php) se encarga de analizar las páginas de índices anuales descargadas y extraer de ellas los enlaces a boletines que contengan.
+
 ## Desarrollo
 
 **Boc·ajarro**:
 
--   es una aplicación [Laravel](https://laravel.com)
--   revisa el estilo del código utilizando [Pint](https://laravel.com/docs/11.x/pint)
--   testea el código utilizando [Pest](https://pestphp.com)
+-   Es una aplicación [Laravel](https://laravel.com).
+-   Revisa el estilo del código utilizando [Pint](https://laravel.com/docs/11.x/pint).
+-   Testea el código utilizando [Pest](https://pestphp.com).
 
 ## Tareas programadas
 
