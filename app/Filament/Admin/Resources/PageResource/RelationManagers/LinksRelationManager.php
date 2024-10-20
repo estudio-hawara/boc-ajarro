@@ -21,7 +21,7 @@ class LinksRelationManager extends RelationManager
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('page.name')
-                    ->url(fn (Link $record): string => $record->url)
+                    ->url(fn (Link $record): string => $record->page->url)
                     ->sortable()
                     ->searchable(),
 
