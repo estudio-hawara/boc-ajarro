@@ -6,4 +6,5 @@ enum BocUrl: string
 {
     case Root = 'https://www.gobiernodecanarias.org';
     case Archive = 'https://www.gobiernodecanarias.org/boc/archivo/';
+    case YearIndex = 'https://www.gobiernodecanarias.org/boc/archivo/{year}/';
 }

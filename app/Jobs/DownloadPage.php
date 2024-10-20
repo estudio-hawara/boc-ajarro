@@ -54,22 +54,29 @@ class DownloadPage extends AbstractJob
             ->orderBy('created_at', 'desc')
             ->first();
 
-        $extractLinks = false;
+        $storeContent = ! $previousPage || $previousPage['content'] != $response->body();
 
-        if (! $previousPage || $previousPage['content'] != $response->body()) {
+        if ($storeContent) {
             $page['content'] = $response->body();
-            $extractLinks = true;
         } else {
             $page['shared_content_with_page_id'] = $previousPage['id'];
         }
 
         $created = Page::create($page);
 
-        if ($extractLinks) {
-            ExtractPageLinks::dispatch(
-                pageId: $created->id,
-                root: $this->root,
-            );
+        if ($storeContent) {
+            $this->extractLinks($created->id, $this->root);
         }
+    }
+
+    /**
+     * Extract the links of this page.
+     */
+    protected function extractLinks(int $pageId): void
+    {
+        ExtractPageLinks::dispatch(
+            pageId: $pageId,
+            root: $this->root,
+        );
     }
 }

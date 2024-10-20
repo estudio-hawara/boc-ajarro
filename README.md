@@ -37,7 +37,7 @@ composer run dev
 
 ### Descarga de archivos
 
-El [Boletín Oficial de Canarias](https://www.gobiernodecanarias.org/boc/) tiene una página, llamada el [Archivo de boletines](https://www.gobiernodecanarias.org/boc/archivo/) que contiene enlaces a cada uno de los años en los que se ha publicado algún boletín.
+El [Boletín Oficial de Canarias](https://www.gobiernodecanarias.org/boc/) tiene una página, llamada el [Archivo de boletines](https://www.gobiernodecanarias.org/boc/archivo/), que contiene enlaces a cada uno de los años en los que se ha publicado algún boletín.
 
 El trabajo [DownloadArchive](app/Jobs/Boc/DownloadArchive.php) se encarga de descargar esta página y guardar su contenido sin procesar en la tabla `page`. Los datos que se guardan son:
 
@@ -77,6 +77,18 @@ Los enlaces descargados se guardan en la tabla `link`, donde se guardan estos ca
 -   `page_id` identificador de la página en la que se encontró el enlace.
 -   `url` enlace en versión absoluta.
 -   `created_at` fecha y hora a la que se procesó el enlace.
+
+### Descarga de índices anuales
+
+Para cada año en que se ha publicado algún boletín, hay un índice con cada uno de los boletines. El índice empieza en [1980](https://www.gobiernodecanarias.org/boc/archivo/1980/) cuando solo se publicaron cuatro boletines.
+
+El trabajo [DownloadYearIndex](app/Jobs/Boc/DownloadYearIndex.php) se encarga de descargar el contenido de esos índices y guardarlo sin procesar en la tabla `page`.
+
+Este proceso puede ejecutarse manualmente lanzando:
+
+```php
+App\Jobs\Boc\DownloadYearIndex::dispatch(1980)->handle();
+```
 
 ## Desarrollo
 

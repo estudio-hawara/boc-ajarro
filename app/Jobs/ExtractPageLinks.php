@@ -65,9 +65,15 @@ class ExtractPageLinks extends AbstractJob
         $links = [];
 
         foreach ($node->findMulti('a') as $link) {
-            $links[] = urljoin($this->root, $pageUrl, $link->href);
+            $url = urljoin($this->root, $pageUrl, $link->href);
+
+            if (in_array($url, $links)) {
+                continue;
+            }
+
+            $links[] = $url;
         }
 
-        return collect($links);
+        return collect($links)->sort();
     }
 }

@@ -22,7 +22,7 @@ class LinksRelationManager extends RelationManager
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('page.name')
-                    ->url(fn (Link $record): string => BocUrl::{$record->page->name}->value)
+                    ->url(fn (Link $record): string => $record->url)
                     ->sortable()
                     ->searchable(),
 

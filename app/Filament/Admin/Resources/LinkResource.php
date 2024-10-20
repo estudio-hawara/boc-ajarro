@@ -28,7 +28,7 @@ class LinkResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('page.name')
-                    ->url(fn (Link $record): string => BocUrl::{$record->page->name}->value)
+                    ->url(fn (Link $record): string => $record->url)
                     ->sortable()
                     ->searchable(),
 
@@ -48,6 +48,28 @@ class LinkResource extends Resource
 
             ])
             ->filters([
+
+                Tables\Filters\Filter::make('page.name')
+                    ->form([
+
+                        Forms\Components\Select::make('page.name')
+                            ->options(
+                                collect(array_column(BocUrl::cases(), 'name'))
+                                    ->combine(array_column(BocUrl::cases(), 'name'))->toArray()
+                            ),
+
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['page']['name'],
+                                fn (Builder $query, $name): Builder =>
+                                    $query->whereHas(
+                                        'page',
+                                        fn($query) => $query->whereName($name)
+                                    )
+                            );
+                    }),
 
                 Tables\Filters\Filter::make('created_at')
                     ->form([

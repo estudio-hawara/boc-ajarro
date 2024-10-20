@@ -8,7 +8,7 @@ use App\Models\Page;
 use Illuminate\Support\Collection;
 use voku\helper\SimpleHtmlDomNodeInterface;
 
-class ExtractArchiveLinks extends ExtractPageLinks
+class ExtractYearIndexLinks extends ExtractPageLinks
 {
     /**
      * Create a new job instance.
@@ -25,8 +25,8 @@ class ExtractArchiveLinks extends ExtractPageLinks
             return;
         }
 
-        if ($page->name != BocUrl::Archive->name) {
-            $this->logAndFail("The page with id $pageId is not an archive page.");
+        if ($page->name != BocUrl::YearIndex->name) {
+            $this->logAndFail("The page with id $pageId is not a year index.");
 
             return;
         }
@@ -48,7 +48,7 @@ class ExtractArchiveLinks extends ExtractPageLinks
         foreach ($node->findMulti('a') as $link) {
             $url = urljoin(BocUrl::Root->value, $pageUrl, $link->href);
 
-            if (! preg_match('/https:\/\/www.gobiernodecanarias.org\/boc\/archivo\/\d{4}$/', rtrim($url, '/'))) {
+            if (! preg_match('/https:\/\/www.gobiernodecanarias.org\/boc\/\d{4}\/\d{3}$/', rtrim($url, '/'))) {
                 continue;
             }
 

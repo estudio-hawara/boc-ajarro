@@ -29,7 +29,7 @@ class PageResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('name')
-                    ->url(fn (Page $record): string => BocUrl::{$record->name}->value)
+                    ->url(fn (Page $record): string => $record->url)
                     ->sortable()
                     ->searchable(),
 
@@ -62,7 +62,10 @@ class PageResource extends Resource
                 Tables\Filters\Filter::make('name')
                     ->form([
                         Forms\Components\Select::make('name')
-                            ->options(array_column(BocUrl::cases(), 'name')),
+                            ->options(
+                                collect(array_column(BocUrl::cases(), 'name'))
+                                    ->combine(array_column(BocUrl::cases(), 'name'))->toArray()
+                            ),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query

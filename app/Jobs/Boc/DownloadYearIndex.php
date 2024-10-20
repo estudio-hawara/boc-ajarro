@@ -5,16 +5,16 @@ namespace App\Jobs\Boc;
 use App\Http\BocUrl;
 use App\Jobs\DownloadPage;
 
-class DownloadArchive extends DownloadPage
+class DownloadYearIndex extends DownloadPage
 {
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(protected string $year)
     {
         parent::__construct(
-            url: BocUrl::Archive->value,
-            name: BocUrl::Archive->name,
+            url: str_replace('{year}', $year, BocUrl::YearIndex->value),
+            name: BocUrl::YearIndex->name,
             root: BocUrl::Root->value
         );
     }
@@ -24,10 +24,9 @@ class DownloadArchive extends DownloadPage
      */
     protected function extractLinks(int $pageId): void
     {
-        ExtractArchiveLinks::dispatch(
+        ExtractYearIndexLinks::dispatch(
             pageId: $pageId,
             root: $this->root,
         );
     }
-
 }
