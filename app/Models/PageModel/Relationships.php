@@ -23,6 +23,10 @@ trait Relationships
      */
     public function links(): HasMany
     {
+        if ($this->pageWithSharedContent) {
+            return $this->pageWithSharedContent->hasMany(Link::class);
+        }
+
         return $this->hasMany(Link::class);
     }
 

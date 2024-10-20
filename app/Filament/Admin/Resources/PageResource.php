@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\PageResource\Pages;
+use App\Filament\Admin\Resources\PageResource\RelationManagers;
 use App\Http\BocUrl;
 use App\Models\Page;
 use Filament\Forms;
@@ -17,12 +18,15 @@ class PageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-arrow-down';
 
+    protected static ?int $navigationSort = 1;
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
 
-                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('id')
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('name')
                     ->url(fn (Page $record): string => BocUrl::{$record->name}->value)
@@ -33,7 +37,7 @@ class PageResource extends Resource
                     ->getStateUsing(function (Page $record) {
                         return strip_tags($record->getContent());
                     })
-                    ->limit(100),
+                    ->limit(50),
 
                 Tables\Columns\TextColumn::make('length')
                     ->state(fn (Page $record): string => mb_strlen($record->getContent()))
@@ -70,12 +74,15 @@ class PageResource extends Resource
 
                 Tables\Filters\Filter::make('created_at')
                     ->form([
+
                         Forms\Components\DatePicker::make('date_from')
                             ->native(false)
                             ->displayFormat('d/m/Y'),
+
                         Forms\Components\DatePicker::make('date_to')
                             ->native(false)
                             ->displayFormat('d/m/Y'),
+
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -96,7 +103,9 @@ class PageResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+
+            RelationManagers\LinksRelationManager::class,
+
         ];
     }
 

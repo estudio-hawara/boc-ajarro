@@ -69,6 +69,15 @@ El campo que se utiliza para el vínculo es:
 
 Una vez descargada la página que contiene la lista de años para los que se han publicado boletines, obtenemos la lista con esos enlaces.
 
+El trabajo [ExtractArchiveLinks](app/Jobs/Boc/ExtractArchiveLinks.php) se encarga de leer un registro de la tabla `page`, comprobar que se trata de una descarga del archivo de boletines y, si es así, extraer sus enlaces a las páginas anuales.
+
+Los enlaces descargados se guardan en la tabla `link`, donde se guardan estos campos:
+
+-   `id` identificador único del enlace.
+-   `page_id` identificador de la página en la que se encontró el enlace.
+-   `url` enlace en versión absoluta.
+-   `created_at` fecha y hora a la que se procesó el enlace.
+
 ## Desarrollo
 
 **Boc·ajarro**:
@@ -88,6 +97,8 @@ php artisan schedule:list
 ```
 0 0 \* \* \* App\Jobs\Boc\DownloadArchive ............... Next Due: 1 hour from now
 ```
+
+Las descargas de páginas del archivo, cuando encuentran contenido nuevo, disparan automáticamente el proceso de sus correspondientes enlaces. Por lo que el proceso de enlaces no necesita ser programado como tarea.
 
 ### Tests
 
