@@ -13,7 +13,8 @@ class ViewPage extends ViewRecord
 {
     protected static string $resource = PageResource::class;
 
-    public function infolist(Infolist $infolist): Infolist {
+    public function infolist(Infolist $infolist): Infolist
+    {
         return $infolist
             ->schema([
 

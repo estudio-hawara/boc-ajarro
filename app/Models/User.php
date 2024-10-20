@@ -38,8 +38,6 @@ class User extends Authenticatable implements FilamentUser
 
     /**
      * Can the user access the admin panel?
-     *
-     * @return bool
      */
     public function canAccessPanel(Panel $panel): bool
     {

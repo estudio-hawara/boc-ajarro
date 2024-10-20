@@ -6,7 +6,7 @@ use App\Jobs\ExtractPageLinks;
 use App\Models\Page;
 use Mockery\MockInterface;
 
-test('only the year links are extracted', function() {
+test('only the year links are extracted', function () {
     // Prepare
     $page = Page::factory()->make();
     $page['name'] = BocUrl::Archive->name;
@@ -30,7 +30,7 @@ test('only the year links are extracted', function() {
     expect($page->links->first()->url)->toBe('https://www.gobiernodecanarias.org/boc/archivo/1980/');
 });
 
-test('links are not added twice', function() {
+test('links are not added twice', function () {
     // Prepare
     $page = Page::factory()->make();
     $page['name'] = BocUrl::Archive->name;
@@ -67,7 +67,7 @@ test('extract page link jobs are used behind the hood', function () {
     expect(is_a(new ExtractArchiveLinks($page->id), ExtractPageLinks::class))->toBeTrue();
 });
 
-test('fails with error if the page does not exist', function() {
+test('fails with error if the page does not exist', function () {
     // Prepare, act and assert
     $mock = $this->partialMock(ExtractArchiveLinks::class, function (MockInterface $mock) {
         $mock->shouldReceive('fail')->once();
@@ -76,7 +76,7 @@ test('fails with error if the page does not exist', function() {
     $mock->__construct(pageId: 1);
 });
 
-test('fails with error if the page is not an archive page', function() {
+test('fails with error if the page is not an archive page', function () {
     // Prepare, act and assert
     $mock = $this->partialMock(ExtractArchiveLinks::class, function (MockInterface $mock) {
         $mock->shouldReceive('fail')->once();

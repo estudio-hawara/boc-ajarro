@@ -4,7 +4,7 @@ use App\Filament\Admin\Resources\PageResource;
 use App\Models\Page;
 use App\Models\User;
 
-test('can view the details of a downloaded page', function() {
+test('can view the details of a downloaded page', function () {
     // Prepare
     $page = Page::factory()->create();
 
@@ -14,7 +14,7 @@ test('can view the details of a downloaded page', function() {
         ->assertSuccessful();
 });
 
-test('when content is shared, a link to the related page is shown', function() {
+test('when content is shared, a link to the related page is shown', function () {
     // Prepare
     $relatedPage = Page::factory()->create();
 

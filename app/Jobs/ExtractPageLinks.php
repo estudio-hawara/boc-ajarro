@@ -46,14 +46,14 @@ class ExtractPageLinks extends AbstractJob
         // Extract and store the links
         $links = $this->chosenLinks($parsing->dom->findMulti('a'), $parsing->page->url);
 
-        DB::transaction(function() use($existingLinkCount, $parsing, $links) {
+        DB::transaction(function () use ($existingLinkCount, $parsing, $links) {
             if ($existingLinkCount && $this->recreate) {
                 $parsing->page->links()->delete();
             }
-    
+
             $parsing->page->links()->createMany(
                 $links->map(fn ($link) => ['url' => $link])
-            );    
+            );
         });
     }
 

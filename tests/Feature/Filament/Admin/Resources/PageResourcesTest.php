@@ -6,7 +6,7 @@ use App\Models\User;
 
 use function Pest\Livewire\livewire;
 
-test('can list downloaded pages', function() {
+test('can list downloaded pages', function () {
     // Prepare
     $pages = Page::factory()->count(10)->create();
 

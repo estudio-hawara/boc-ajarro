@@ -8,7 +8,9 @@ use voku\helper\HtmlDomParser;
 class GetParsedDom
 {
     public readonly ?Page $page;
+
     public readonly ?HtmlDomParser $dom;
+
     public readonly ?string $error;
 
     public function __construct(int $pageId)

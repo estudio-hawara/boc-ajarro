@@ -2,7 +2,7 @@
 
 use App\Models\Page;
 
-test("content can be accessed even if it's via relationship", function() {
+test("content can be accessed even if it's via relationship", function () {
     // Prepare
     $sharedContent = 'shared-content';
 

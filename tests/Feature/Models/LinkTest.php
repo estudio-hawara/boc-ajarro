@@ -3,7 +3,7 @@
 use App\Models\Link;
 use App\Models\Page;
 
-test("the content of the related page can be accessed", function() {
+test('the content of the related page can be accessed', function () {
     // Prepare
     $relatedContent = 'related-content';
 

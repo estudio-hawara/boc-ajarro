@@ -3,7 +3,7 @@
 use App\Jobs\ExtractPageLinks;
 use App\Models\Page;
 
-test('links of a page are extracted', function() {
+test('links of a page are extracted', function () {
     // Prepare
     $page = Page::factory()->make();
     $page['content'] = '
@@ -25,7 +25,7 @@ test('links of a page are extracted', function() {
     expect($page->links->count())->toBe(2);
 });
 
-test('links of a page can be recreated if they existed already', function() {
+test('links of a page can be recreated if they existed already', function () {
     // Prepare
     $page = Page::factory()->make();
     $page['content'] = '
@@ -51,7 +51,7 @@ test('links of a page can be recreated if they existed already', function() {
     expect($page->links->first()->id >= $link->id)->toBeTrue();
 });
 
-test('fails with error if the page does not exist', function() {
+test('fails with error if the page does not exist', function () {
     // Prepare
     $mock = \Mockery::mock('App\Jobs\ExtractPageLinks[fail]', [1, 'http://localhost']);
 

@@ -4,7 +4,7 @@ use App\Actions\GetParsedDom;
 use App\Models\Page;
 use voku\helper\HtmlDomParser;
 
-test('can parse an html page', function() {
+test('can parse an html page', function () {
     // Prepare
     $page = Page::factory()->create();
 
@@ -16,7 +16,7 @@ test('can parse an html page', function() {
     expect($parsing->error)->toBeNull();
 });
 
-test('fails if the page does not exist', function() {
+test('fails if the page does not exist', function () {
     // Prepare and act
     $parsing = new GetParsedDom(1);
 
@@ -25,7 +25,7 @@ test('fails if the page does not exist', function() {
     expect($parsing->dom)->toBeNull();
 });
 
-test('fails if the page content is from a related page download', function() {
+test('fails if the page content is from a related page download', function () {
     // Prepare
     $firstPage = Page::factory()->create();
     $secondPage = Page::create([

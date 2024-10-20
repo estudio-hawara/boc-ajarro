@@ -1,7 +1,8 @@
 <?php
 
 if (! function_exists('urljoin')) {
-    function urljoin(string $root, string $current, string $path) {
+    function urljoin(string $root, string $current, string $path)
+    {
         // Empty links
         if (! $path) {
             return $current;
@@ -19,6 +20,6 @@ if (! function_exists('urljoin')) {
             $path = substr($path, 1);
         }
 
-        return rtrim($base, '/') . '/' . ltrim($path, '/');
+        return rtrim($base, '/').'/'.ltrim($path, '/');
     }
 }
