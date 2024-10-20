@@ -24,9 +24,6 @@ class DownloadYearIndex extends DownloadPage
      */
     protected function extractLinks(int $pageId): void
     {
-        ExtractYearIndexLinks::dispatch(
-            pageId: $pageId,
-            root: $this->root,
-        );
+        ExtractYearIndexLinks::dispatch($pageId);
     }
 }

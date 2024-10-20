@@ -1,27 +1,26 @@
 <?php
 
-use App\Http\BocUrl;
-use App\Jobs\Boc\DownloadArchive;
-use App\Jobs\Boc\ExtractArchiveLinks;
+use App\Jobs\Boc\DownloadYearIndex;
+use App\Jobs\Boc\ExtractYearIndexLinks;
 use App\Jobs\DownloadPage;
 use Illuminate\Support\Facades\Queue;
 
 test('download page jobs are used behind the hood', function () {
     // Prepare and act
-    $job = new DownloadArchive;
+    $job = new DownloadYearIndex(1980);
 
     // Assert
-    expect($job->getUrl())->toBe(BocUrl::Archive->value);
+    expect($job->getUrl())->toBe('https://www.gobiernodecanarias.org/boc/1980/');
     expect(is_a($job, DownloadPage::class))->toBeTrue();
 });
 
 test('links are extracted using the proper extractor', function () {
     // Prepare
     Queue::fake();
-    $job = new DownloadArchive;
+    $job = new DownloadYearIndex(1980);
 
     // Act
     $job->handle();
 
-    Queue::assertPushed(ExtractArchiveLinks::class);
+    Queue::assertPushed(ExtractYearIndexLinks::class);
 });

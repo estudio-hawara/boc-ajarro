@@ -24,9 +24,6 @@ class DownloadArchive extends DownloadPage
      */
     protected function extractLinks(int $pageId): void
     {
-        ExtractArchiveLinks::dispatch(
-            pageId: $pageId,
-            root: $this->root,
-        );
+        ExtractArchiveLinks::dispatch($pageId);
     }
 }
