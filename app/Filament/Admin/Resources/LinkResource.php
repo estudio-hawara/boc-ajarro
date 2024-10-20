@@ -63,11 +63,10 @@ class LinkResource extends Resource
                         return $query
                             ->when(
                                 $data['page']['name'],
-                                fn (Builder $query, $name): Builder =>
-                                    $query->whereHas(
-                                        'page',
-                                        fn($query) => $query->whereName($name)
-                                    )
+                                fn (Builder $query, $name): Builder => $query->whereHas(
+                                    'page',
+                                    fn ($query) => $query->whereName($name)
+                                )
                             );
                     }),
 

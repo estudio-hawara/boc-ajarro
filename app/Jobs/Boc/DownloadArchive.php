@@ -29,5 +29,4 @@ class DownloadArchive extends DownloadPage
             root: $this->root,
         );
     }
-
 }
