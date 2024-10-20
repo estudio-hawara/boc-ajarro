@@ -114,7 +114,8 @@ php artisan schedule:list
 0 0 \* \* \* App\Jobs\Boc\DownloadArchive ............... Next Due: 1 hour from now
 ```
 
-Las descargas de páginas del archivo, cuando encuentran contenido nuevo, disparan automáticamente el proceso de sus correspondientes enlaces. Por lo que el proceso de enlaces no necesita ser programado como tarea.
+> [!NOTE]
+> Las descargas de páginas del archivo, cuando encuentran contenido nuevo, disparan automáticamente el proceso de sus correspondientes enlaces. Por lo que el proceso de enlaces no necesita ser programado como tarea.
 
 ### Tests
 
