@@ -48,7 +48,7 @@ class ExtractArchiveLinks extends ExtractPageLinks
         foreach ($node->findMulti('a') as $link) {
             $url = urljoin(BocUrl::Root->value, $pageUrl, $link->href);
 
-            if (! preg_match('/https:\/\/www.gobiernodecanarias.org\/boc\/archivo\/\d{4}$/', rtrim($url, '/'))) {
+            if (! preg_match('/https:\/\/www.gobiernodecanarias.org\/boc\/archivo\/\d{4,}$/', rtrim($url, '/'))) {
                 continue;
             }
 
