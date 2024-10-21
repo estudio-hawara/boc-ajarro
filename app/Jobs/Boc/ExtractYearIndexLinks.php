@@ -48,7 +48,7 @@ class ExtractYearIndexLinks extends ExtractPageLinks
         foreach ($node->findMulti('a') as $link) {
             $url = urljoin(BocUrl::Root->value, $pageUrl, $link->href);
 
-            if (! preg_match('/https:\/\/www.gobiernodecanarias.org\/boc\/\d{4,}\/\d{3,}$/', rtrim($url, '/'))) {
+            if (! preg_match(BocUrl::BulletinIndex->pattern(), rtrim($url, '/'))) {
                 continue;
             }
 

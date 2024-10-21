@@ -48,7 +48,7 @@ class ExtractBulletinIndexLinks extends ExtractPageLinks
         foreach ($node->findMulti('a') as $link) {
             $url = urljoin(BocUrl::Root->value, $pageUrl, $link->href);
 
-            if (! preg_match('/https:\/\/www.gobiernodecanarias.org\/boc\/\d{4,}\/\d{3,}\/\d{3,}\.html$/', rtrim($url, '/'))) {
+            if (! preg_match(BocUrl::BulletinArticle->pattern(), rtrim($url, '/'))) {
                 continue;
             }
 
