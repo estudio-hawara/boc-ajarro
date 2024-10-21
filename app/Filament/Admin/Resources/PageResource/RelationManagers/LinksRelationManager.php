@@ -9,6 +9,8 @@ use Filament\Tables\Table;
 
 class LinksRelationManager extends RelationManager
 {
+    use LinksRelationManager\Permissions;
+
     protected static string $relationship = 'links';
 
     public function table(Table $table): Table

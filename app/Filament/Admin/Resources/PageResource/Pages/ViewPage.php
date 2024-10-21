@@ -19,7 +19,7 @@ class ViewPage extends ViewRecord
             ->schema([
 
                 Infolists\Components\TextEntry::make('name')
-                    ->url(fn (Page $record): string => BocUrl::{$record->name}->value),
+                    ->url(fn (Page $record): string => $record->url),
 
                 Infolists\Components\TextEntry::make('length')
                     ->state(fn (Page $record): string => mb_strlen($record->getContent()))
