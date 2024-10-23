@@ -35,7 +35,7 @@ class PageResource extends Resource
 
                 Tables\Columns\TextColumn::make('content')
                     ->getStateUsing(function (Page $record) {
-                        return strip_tags($record->getContent());
+                        return strip_tags($record->getContent() ?? '');
                     })
                     ->limit(50),
 
@@ -52,7 +52,7 @@ class PageResource extends Resource
                 Tables\Columns\TextColumn::make('shared_content_with_page_id')
                     ->label('Shared content with')
                     ->getStateUsing(function (Page $record) {
-                        return strip_tags($record?->pageWithSharedContent?->created_at ?? '');
+                        return $record?->pageWithSharedContent?->created_at;
                     })
                     ->datetime(),
 
