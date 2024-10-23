@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Resources\PageResource\Pages;
 
 use App\Filament\Admin\Resources\PageResource;
-use App\Http\BocUrl;
 use App\Models\Page;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
@@ -31,7 +30,7 @@ class ViewPage extends ViewRecord
                 Infolists\Components\TextEntry::make('shared_content_with_page_id')
                     ->label('Shared content with')
                     ->getStateUsing(function (Page $record) {
-                        return strip_tags($record?->pageWithSharedContent?->created_at);
+                        return $record?->pageWithSharedContent?->created_at;
                     })
                     ->datetime()
                     ->url(function (Page $record): string {
@@ -47,7 +46,11 @@ class ViewPage extends ViewRecord
 
                 Infolists\Components\TextEntry::make('content')
                     ->getStateUsing(function (Page $record) {
-                        return strip_tags($record->getContent());
+                        if ($record->name == 'Robots') {
+                            return mb_convert_encoding($record->getContent(), 'UTF-8', 'UTF-8');
+                        }
+
+                        return strip_tags($record->getContent() ?? '');
                     })
                     ->columnSpanFull()
                     ->helperText('Click to copy')
