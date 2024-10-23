@@ -57,7 +57,7 @@ class DownloadPage extends AbstractJob
         $storeContent = ! $previousPage || $previousPage['content'] != $response->body();
 
         if ($storeContent) {
-            $page['content'] = $response->body();
+            $page['content'] = mb_convert_encoding($response->body(), 'UTF-8', 'UTF-8');
         } else {
             $page['shared_content_with_page_id'] = $previousPage['id'];
         }
