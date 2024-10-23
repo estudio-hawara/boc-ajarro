@@ -8,11 +8,15 @@ use App\Models\Link;
 class CountDownloads
 {
     public readonly int $totalYearIndex;
+
     public readonly int $totalBulletinIndex;
+
     public readonly int $totalBulletinArticle;
 
     public readonly int $missingYearIndex;
+
     public readonly int $missingBulletinIndex;
+
     public readonly int $missingBulletinArticle;
 
     public function __construct()

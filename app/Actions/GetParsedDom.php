@@ -26,7 +26,7 @@ class GetParsedDom
         }
 
         if (! isset($this->error)) {
-            $document = new Document();
+            $document = new Document;
             $document->loadHtml($this->page->getContent());
 
             $this->dom = $document;

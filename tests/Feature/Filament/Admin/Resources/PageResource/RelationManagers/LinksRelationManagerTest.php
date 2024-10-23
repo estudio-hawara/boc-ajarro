@@ -13,6 +13,6 @@ test('links found in a page are shown', function () {
 
     livewire(PageResource\RelationManagers\LinksRelationManager::class, [
         'pageClass' => Page::class,
-        'ownerRecord' => $page
+        'ownerRecord' => $page,
     ])->assertSuccessful();
 });

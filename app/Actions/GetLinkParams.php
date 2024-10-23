@@ -8,7 +8,9 @@ use App\Models\Link;
 class GetLinkParams
 {
     public readonly ?string $year;
+
     public readonly ?string $bulletin;
+
     public readonly ?string $article;
 
     public function __construct(Link $link)

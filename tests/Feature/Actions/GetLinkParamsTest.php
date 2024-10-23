@@ -10,7 +10,7 @@ test('can extract the params of a bulletin article link', function () {
     $page = Page::factory()->create(['name' => BocUrl::BulletinIndex->name]);
     $link = Link::create([
         'page_id' => $page->id,
-        'url' => 'https://www.gobiernodecanarias.org/boc/1991/012/123.html'
+        'url' => 'https://www.gobiernodecanarias.org/boc/1991/012/123.html',
     ]);
 
     // Act
@@ -27,7 +27,7 @@ test('can extract the params of a bulletin index link', function () {
     $page = Page::factory()->create(['name' => BocUrl::YearIndex->name]);
     $link = Link::create([
         'page_id' => $page->id,
-        'url' => 'https://www.gobiernodecanarias.org/boc/1990/321/'
+        'url' => 'https://www.gobiernodecanarias.org/boc/1990/321/',
     ]);
 
     // Act
@@ -44,7 +44,7 @@ test('can extract the params of a year index link', function () {
     $page = Page::factory()->create(['name' => BocUrl::Archive->name]);
     $link = Link::create([
         'page_id' => $page->id,
-        'url' => 'https://www.gobiernodecanarias.org/boc/1985/'
+        'url' => 'https://www.gobiernodecanarias.org/boc/1985/',
     ]);
 
     // Act
@@ -61,7 +61,7 @@ test('returns null params for other links', function () {
     $page = Page::factory()->create(['name' => BocUrl::BulletinIndex->name]);
     $link = Link::create([
         'page_id' => $page->id,
-        'url' => 'https://www.gobiernodecanarias.org/robots.txt'
+        'url' => 'https://www.gobiernodecanarias.org/robots.txt',
     ]);
 
     // Act
