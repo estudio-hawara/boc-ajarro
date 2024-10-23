@@ -13,20 +13,21 @@ enum BocUrl: string
 
     public function pattern(): string
     {
-        return match($this) {
+        return match ($this) {
             BocUrl::YearIndex => '/https:\/\/www.gobiernodecanarias.org\/boc(\/archivo)?\/(?P<year>\d{4,})(\/)?$/',
             BocUrl::BulletinIndex => '/https:\/\/www.gobiernodecanarias.org\/boc(\/archivo)?\/(?P<year>\d{4,})\/(?P<bulletin>\d{3,})(\/)?$/',
             BocUrl::BulletinArticle => '/https:\/\/www.gobiernodecanarias.org\/boc(\/archivo)?\/(?P<year>\d{4,})\/(?P<bulletin>\d{3,})\/(?P<article>\d{3,}).html$/',
-            default => '/'. str_replace('/', '\/', rtrim($this->value, '/')) . '/',
+            default => '/'.str_replace('/', '\/', rtrim($this->value, '/')).'/',
         };
     }
 
     public function contains(): ?BocUrl
     {
-        return match($this) {
+        return match ($this) {
             BocUrl::Archive => BocUrl::YearIndex,
             BocUrl::YearIndex => BocUrl::BulletinIndex,
             BocUrl::BulletinIndex => BocUrl::BulletinArticle,
+            default => null,
         };
     }
 }
