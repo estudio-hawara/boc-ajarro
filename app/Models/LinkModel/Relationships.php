@@ -17,5 +17,15 @@ trait Relationships
         return $this->hasOne(Page::class, 'id', 'page_id');
     }
 
+    /**
+     * The last download of this link.
+     */
+    public function lastDownload(): HasOne
+    {
+        return $this->hasOne(Page::class, 'url', 'url')
+            ->orderBy('created_at', 'desc')
+            ->limit(1);
+    }
+
     // @codeCoverageIgnoreEnd
 }

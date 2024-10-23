@@ -18,16 +18,36 @@ class LinkFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->randomElement(array_column(BocUrl::cases(), 'name'));
-        $url = BocUrl::{$name}->value;
+        $foundIn = fake()->randomElement([
+            BocUrl::Archive,
+            BocUrl::YearIndex,
+            BocUrl::BulletinIndex,
+        ]);
+
+        $page = Page::factory()->create([
+            'name' => $foundIn->name,
+            'url' => $foundIn->value,
+        ]);
+
+        $url = BocUrl::{$foundIn->name}->contains()?->value;
         $url = str_replace('{year}', fake()->year(), $url);
         $url = str_replace('{bulletin}', fake()->numerify(), $url);
-        $url = str_replace('{page}', fake()->numerify(), $url);
+        $url = str_replace('{article}', fake()->numerify(), $url);
 
         return [
             'url' => $url,
-            'page_id' => Page::factory(),
+            'page_id' => $page->id,
             'created_at' => \Carbon\Carbon::now(),
         ];
+    }
+
+    /**
+     * Indicate that the link has been disallowed by a robots.txt rule.
+     */
+    public function disallowed(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'disallowed_at' => \Carbon\Carbon::now(),
+        ]);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\LinkModel\Relationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +10,8 @@ class Link extends Model
     /** @use HasFactory<\Database\Factories\LinkFactory> */
     use HasFactory;
 
-    use Relationships;
+    use LinkModel\Filters;
+    use LinkModel\Relationships;
 
     /**
      * Indicates if the model should be timestamped.
@@ -27,7 +27,7 @@ class Link extends Model
      *
      * @var array
      */
-    protected $fillable = ['page_id', 'url'];
+    protected $fillable = ['page_id', 'url', 'disallowed_at'];
 
     /**
      * Return the page content.

@@ -17,11 +17,15 @@ class PageFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->randomElement(array_column(BocUrl::cases(), 'name'));
+        $name = fake()->randomElement([
+            BocUrl::Archive,
+            BocUrl::YearIndex,
+            BocUrl::BulletinIndex,
+        ]);
 
         return [
-            'name' => $name,
-            'url' => BocUrl::{$name}->value,
+            'name' => $name->name,
+            'url' => $name->value,
             'content' => fake()->randomHtml(),
             'created_at' => \Carbon\Carbon::now(),
         ];

@@ -23,7 +23,10 @@ return new class extends Migration
             $table->timestamp('created_at')
                 ->useCurrent();
 
-            $table->index(['page_id', 'created_at']);
+            $table->timestamp('disallowed_at')
+                ->nullable();
+
+            $table->index(['page_id', 'created_at', 'disallowed_at']);
 
         });
     }
