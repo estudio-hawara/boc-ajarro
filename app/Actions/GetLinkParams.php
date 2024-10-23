@@ -13,16 +13,13 @@ class GetLinkParams
 
     public function __construct(Link $link)
     {
-        $linkType = match($link->page->name) {
-            BocUrl::Archive->name => BocUrl::YearIndex->name,
-            BocUrl::YearIndex->name => BocUrl::BulletinIndex->name,
-            BocUrl::BulletinIndex->name => BocUrl::BulletinArticle->name,
-        };
+        $foundIn = BocUrl::{$link->page->name};
+        $contains = $foundIn->contains();
 
         $matches = [];
 
-        if ($linkType) {
-            $pattern = BocUrl::{$linkType}->pattern();
+        if ($contains) {
+            $pattern = BocUrl::{$contains->name}->pattern();
             preg_match($pattern, $link->url, $matches);
         }
 

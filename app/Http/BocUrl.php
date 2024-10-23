@@ -20,4 +20,13 @@ enum BocUrl: string
             default => '/'. str_replace('/', '\/', rtrim($this->value, '/')) . '/',
         };
     }
+
+    public function contains(): ?BocUrl
+    {
+        return match($this) {
+            BocUrl::Archive => BocUrl::YearIndex,
+            BocUrl::YearIndex => BocUrl::BulletinIndex,
+            BocUrl::BulletinIndex => BocUrl::BulletinArticle,
+        };
+    }
 }
