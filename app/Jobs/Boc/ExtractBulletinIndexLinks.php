@@ -6,7 +6,7 @@ use App\Http\BocUrl;
 use App\Jobs\ExtractPageLinks;
 use App\Models\Page;
 use Illuminate\Support\Collection;
-use voku\helper\SimpleHtmlDomNodeInterface;
+use DiDom\Document;
 
 class ExtractBulletinIndexLinks extends ExtractPageLinks
 {
@@ -41,11 +41,11 @@ class ExtractBulletinIndexLinks extends ExtractPageLinks
     /**
      * Function that filters the links that will be kept from this page.
      */
-    protected function chosenLinks(SimpleHtmlDomNodeInterface $node, string $pageUrl): Collection
+    protected function chosenLinks(array $allLinks, string $pageUrl): Collection
     {
         $links = [];
 
-        foreach ($node->findMulti('a') as $link) {
+        foreach ($allLinks as $link) {
             $url = urljoin(BocUrl::Root->value, $pageUrl, $link->href);
 
             if (! preg_match(BocUrl::BulletinArticle->pattern(), rtrim($url, '/'))) {

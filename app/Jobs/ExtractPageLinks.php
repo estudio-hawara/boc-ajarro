@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Actions\GetParsedDom;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use voku\helper\SimpleHtmlDomNodeInterface;
 
 class ExtractPageLinks extends AbstractJob
 {
@@ -44,7 +43,7 @@ class ExtractPageLinks extends AbstractJob
         }
 
         // Extract and store the links
-        $links = $this->chosenLinks($parsing->dom->findMulti('a'), $parsing->page->url);
+        $links = $this->chosenLinks($parsing->dom->find('a'), $parsing->page->url);
 
         DB::transaction(function () use ($existingLinkCount, $parsing, $links) {
             if ($existingLinkCount && $this->recreate) {
@@ -60,11 +59,11 @@ class ExtractPageLinks extends AbstractJob
     /**
      * Function that filters the links that will be kept from this page.
      */
-    protected function chosenLinks(SimpleHtmlDomNodeInterface $node, string $pageUrl): Collection
+    protected function chosenLinks(array $allLinks, string $pageUrl): Collection
     {
         $links = [];
 
-        foreach ($node->findMulti('a') as $link) {
+        foreach ($allLinks as $link) {
             $url = urljoin($this->root, $pageUrl, $link->href);
 
             if (in_array($url, $links)) {

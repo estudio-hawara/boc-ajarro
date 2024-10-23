@@ -2,7 +2,7 @@
 
 use App\Actions\GetParsedDom;
 use App\Models\Page;
-use voku\helper\HtmlDomParser;
+use DiDom\Document;
 
 test('can parse an html page', function () {
     // Prepare
@@ -12,7 +12,7 @@ test('can parse an html page', function () {
     $parsing = new GetParsedDom($page->id);
 
     // Assert
-    expect(is_a($parsing->dom, HtmlDomParser::class))->toBeTrue();
+    expect(is_a($parsing->dom, Document::class))->toBeTrue();
     expect($parsing->error)->toBeNull();
 });
 

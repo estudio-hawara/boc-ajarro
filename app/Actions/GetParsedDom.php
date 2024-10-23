@@ -3,13 +3,13 @@
 namespace App\Actions;
 
 use App\Models\Page;
-use voku\helper\HtmlDomParser;
+use DiDom\Document;
 
 class GetParsedDom
 {
     public readonly ?Page $page;
 
-    public readonly ?HtmlDomParser $dom;
+    public readonly ?Document $dom;
 
     public readonly ?string $error;
 
@@ -26,7 +26,10 @@ class GetParsedDom
         }
 
         if (! isset($this->error)) {
-            $this->dom = HtmlDomParser::str_get_html($this->page->getContent());
+            $document = new Document();
+            $document->loadHtml($this->page->getContent());
+
+            $this->dom = $document;
             $this->error = null;
         } else {
             $this->dom = null;
