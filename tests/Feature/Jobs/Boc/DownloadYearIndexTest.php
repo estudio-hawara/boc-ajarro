@@ -10,7 +10,7 @@ test('download page jobs are used behind the hood', function () {
     $job = new DownloadYearIndex(1980);
 
     // Assert
-    expect($job->getUrl())->toBe('https://www.gobiernodecanarias.org/boc/1980/');
+    expect($job->getUrl())->toBe('https://www.gobiernodecanarias.org/boc/archivo/1980/');
     expect(is_a($job, DownloadPage::class))->toBeTrue();
 });
 
