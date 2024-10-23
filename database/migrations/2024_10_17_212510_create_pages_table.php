@@ -34,6 +34,7 @@ return new class extends Migration
                 ->useCurrent();
 
             $table->index(['name', 'created_at']);
+            $table->index(['url', 'created_at']);
 
         });
     }
