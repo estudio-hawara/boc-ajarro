@@ -22,6 +22,12 @@ test('the number of finished and missing downloads can be counted', function () 
         'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1981/',
     ]);
 
+    Link::create([
+        'page_id' => $archivePage->id,
+        'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1982/',
+        'disallowed_at' => \Carbon\Carbon::now(),
+    ]);
+
     $yearIndexPage = Page::create([
         'name' => BocUrl::YearIndex->name,
         'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1980/',
@@ -61,11 +67,15 @@ test('the number of finished and missing downloads can be counted', function () 
     $count = new CountDownloads;
 
     // Assert
-    expect($count->totalYearIndex)->toBe(2);
+    expect($count->totalYearIndex)->toBe(3);
     expect($count->totalBulletinIndex)->toBe(2);
     expect($count->totalBulletinArticle)->toBe(2);
 
     expect($count->missingYearIndex)->toBe(1);
     expect($count->missingBulletinIndex)->toBe(1);
     expect($count->missingBulletinArticle)->toBe(1);
+
+    expect($count->disallowedYearIndex)->toBe(1);
+    expect($count->disallowedBulletinIndex)->toBe(0);
+    expect($count->disallowedBulletinArticle)->toBe(0);
 });
