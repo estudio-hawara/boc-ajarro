@@ -5,7 +5,7 @@ namespace App\Jobs\Boc;
 use App\Http\BocUrl;
 use App\Jobs\DownloadPage;
 
-class DownloadBulletinArchive extends DownloadPage
+class DownloadBulletinArticle extends DownloadPage
 {
     /**
      * Create a new job instance.
