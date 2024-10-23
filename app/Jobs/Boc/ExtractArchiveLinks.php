@@ -45,7 +45,7 @@ class ExtractArchiveLinks extends ExtractPageLinks
         $links = [];
 
         foreach ($allLinks as $link) {
-            $url = urljoin(BocUrl::Root->value, $pageUrl, $link->href);
+            $url = urljoin(BocUrl::Root->value, $pageUrl, $link?->href ?? '');
 
             if (! preg_match(BocUrl::YearIndex->pattern(), rtrim($url, '/'))) {
                 continue;

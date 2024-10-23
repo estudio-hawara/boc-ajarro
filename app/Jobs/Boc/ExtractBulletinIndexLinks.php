@@ -6,7 +6,6 @@ use App\Http\BocUrl;
 use App\Jobs\ExtractPageLinks;
 use App\Models\Page;
 use Illuminate\Support\Collection;
-use DiDom\Document;
 
 class ExtractBulletinIndexLinks extends ExtractPageLinks
 {
@@ -46,7 +45,7 @@ class ExtractBulletinIndexLinks extends ExtractPageLinks
         $links = [];
 
         foreach ($allLinks as $link) {
-            $url = urljoin(BocUrl::Root->value, $pageUrl, $link->href);
+            $url = urljoin(BocUrl::Root->value, $pageUrl, $link?->href ?? '');
 
             if (! preg_match(BocUrl::BulletinArticle->pattern(), rtrim($url, '/'))) {
                 continue;

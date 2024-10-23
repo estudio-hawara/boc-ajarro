@@ -64,7 +64,7 @@ class ExtractPageLinks extends AbstractJob
         $links = [];
 
         foreach ($allLinks as $link) {
-            $url = urljoin($this->root, $pageUrl, $link->href);
+            $url = urljoin($this->root, $pageUrl, $link?->href ?? '');
 
             if (in_array($url, $links)) {
                 continue;
