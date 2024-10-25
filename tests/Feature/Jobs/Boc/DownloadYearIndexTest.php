@@ -1,13 +1,23 @@
 <?php
 
+use App\Http\BocUrl;
 use App\Jobs\Boc\DownloadYearIndex;
 use App\Jobs\Boc\ExtractYearIndexLinks;
 use App\Jobs\DownloadPage;
+use App\Models\Link;
+use App\Models\Page;
 use Illuminate\Support\Facades\Queue;
 
 test('download page jobs are used behind the hood', function () {
     // Prepare and act
-    $job = new DownloadYearIndex(1980);
+    $page = new Page();
+    $page->name = BocUrl::Archive->name;
+
+    $link = new Link();
+    $link->url = 'https://www.gobiernodecanarias.org/boc/archivo/1980/';
+    $link->page = $page;
+
+    $job = new DownloadYearIndex($link);
 
     // Assert
     expect($job->getUrl())->toBe('https://www.gobiernodecanarias.org/boc/archivo/1980/');
@@ -17,7 +27,14 @@ test('download page jobs are used behind the hood', function () {
 test('links are extracted using the proper extractor', function () {
     // Prepare
     Queue::fake();
-    $job = new DownloadYearIndex(1980);
+    $page = new Page();
+    $page->name = BocUrl::Archive->name;
+
+    $link = new Link();
+    $link->url = 'https://www.gobiernodecanarias.org/boc/archivo/1980/';
+    $link->page = $page;
+
+    $job = new DownloadYearIndex($link);
 
     // Act
     $job->handle();

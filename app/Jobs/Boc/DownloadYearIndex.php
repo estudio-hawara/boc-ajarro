@@ -2,8 +2,12 @@
 
 namespace App\Jobs\Boc;
 
+use App\Actions\GetLinkParams;
 use App\Http\BocUrl;
 use App\Jobs\DownloadPage;
+use App\Models\Link;
+use App\Models\Page;
+use Illuminate\Queue\Attributes\WithoutRelations;
 
 class DownloadYearIndex extends DownloadPage
 {
@@ -11,9 +15,16 @@ class DownloadYearIndex extends DownloadPage
      * Create a new job instance.
      */
     public function __construct(
-        protected string $year
+        #[WithoutRelations]
+        protected Link $link
     ) {
-        $url = str_replace('{year}', $year, BocUrl::YearIndex->value);
+        $params = new GetLinkParams($link);
+
+        if (! $params->year) {
+            throw new \InvalidArgumentException("Incorrect link for downloading a year's index");
+        }
+
+        $url = str_replace('{year}', $params->year, BocUrl::YearIndex->value);
 
         parent::__construct(
             url: $url,
@@ -25,8 +36,19 @@ class DownloadYearIndex extends DownloadPage
     /**
      * Extract the links of this page.
      */
-    protected function extractLinks(int $pageId): void
+    protected function extractLinks(Page $page): void
     {
-        ExtractYearIndexLinks::dispatch($pageId);
+        ExtractYearIndexLinks::dispatch($page);
+    }
+
+    /**
+     * Handle an error during the download.
+     */
+    protected function handleError(): void
+    {
+        $this->link->downloaded_started_at = null;
+        $this->link->save();
+
+        parent::handleError();
     }
 }

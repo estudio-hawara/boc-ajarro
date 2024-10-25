@@ -3,42 +3,56 @@
 namespace App\Jobs\Boc;
 
 use App\Actions\GetLinkParams;
+use App\Actions\IsLinkAllowed;
 use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
 use App\Models\Link;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Robots\Robots;
 
 class FollowYearIndexLinks extends AbstractJob
 {
+    protected int $limit = 5;
+
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        $link = Link::foundIn(BocUrl::YearIndex)
-            ->notDownloaded()
-            ->notDisallowed()
-            ->orderBy('created_at')
-            ->limit(1)
-            ->first();
+        $links = collect();
 
-        if (! $link) {
+        DB::transaction(function () use(&$links) {
+            $links = Link::foundIn(BocUrl::YearIndex)
+                ->notDownloaded()
+                ->notDisallowed()
+                ->orderBy('created_at')
+                ->limit($this->limit)
+                ->get();
+
+            Link::whereIn('id', $links->pluck('id'))
+                ->update(['download_started_at' => \Carbon\Carbon::now()]);
+        });
+
+        if (! $links->count()) {
             return;
         }
 
-        $robots = Robots::create()->withTxt(
-            Storage::disk('local')->path('robots.txt'),
-        );
+        foreach ($links as $link) {
+            $this->process($link);
+        }
+    }
 
-        if (! $robots->mayIndex($link->url)) {
+    private function process(Link $link): void
+    {
+        if (! (new IsLinkAllowed($link))->allowed) {
+            $link->download_started_at = null;
             $link->disallowed_at = \Carbon\Carbon::now();
             $link->save();
 
             return;
         }
 
-        $params = new GetLinkParams($link);
-        DownloadBulletinIndex::dispatch($params->year, $params->bulletin);
+        DownloadBulletinIndex::dispatch($link);
     }
 }

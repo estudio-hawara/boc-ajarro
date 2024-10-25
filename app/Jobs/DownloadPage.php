@@ -36,7 +36,7 @@ class DownloadPage extends AbstractJob
         $response = Http::get($this->url);
 
         if (! $response->successful()) {
-            $this->logAndFail("Could't download this page: {$this->url}.");
+            $this->handleError();
 
             return;
         }
@@ -65,18 +65,26 @@ class DownloadPage extends AbstractJob
         $created = Page::create($page);
 
         if ($storeContent) {
-            $this->extractLinks($created->id, $this->root);
+            $this->extractLinks($created);
         }
     }
 
     /**
      * Extract the links of this page.
      */
-    protected function extractLinks(int $pageId): void
+    protected function extractLinks(Page $page): void
     {
         ExtractPageLinks::dispatch(
-            pageId: $pageId,
+            page: $page,
             root: $this->root,
         );
+    }
+
+    /**
+     * Handle an error during the download.
+     */
+    protected function handleError(): void
+    {
+        $this->logAndFail("Could't download this page: {$this->url}.");
     }
 }

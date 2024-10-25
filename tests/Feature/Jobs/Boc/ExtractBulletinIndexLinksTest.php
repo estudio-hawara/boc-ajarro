@@ -19,7 +19,7 @@ test('only the bulletin article links are extracted', function () {
         </html>';
     $page->save();
 
-    $job = ExtractBulletinIndexLinks::dispatch($page->id);
+    $job = ExtractBulletinIndexLinks::dispatch($page);
 
     // Act
     $job->handle();
@@ -44,7 +44,7 @@ test('links are not added twice', function () {
         </html>';
     $page->save();
 
-    $job = ExtractBulletinIndexLinks::dispatch($page->id);
+    $job = ExtractBulletinIndexLinks::dispatch($page);
 
     // Act
     $job->handle();
@@ -61,7 +61,7 @@ test('extract page link jobs are used behind the hood', function () {
     $page->save();
 
     // Assert
-    expect(is_a(new ExtractBulletinIndexLinks($page->id), ExtractPageLinks::class))->toBeTrue();
+    expect(is_a(new ExtractBulletinIndexLinks($page), ExtractPageLinks::class))->toBeTrue();
 });
 
 test('fails with error if the page does not exist', function () {
@@ -70,7 +70,10 @@ test('fails with error if the page does not exist', function () {
         $mock->shouldReceive('fail')->once();
     });
 
-    $mock->__construct(pageId: 1);
+    $page = new Page();
+    $page->id = -1;
+
+    $mock->__construct($page);
 });
 
 test('fails with error if the page is not a bulletin index', function () {
@@ -83,5 +86,5 @@ test('fails with error if the page is not a bulletin index', function () {
     $page->name = 'Landing';
     $page->save();
 
-    $mock->__construct(pageId: $page->id);
+    $mock->__construct($page);
 });

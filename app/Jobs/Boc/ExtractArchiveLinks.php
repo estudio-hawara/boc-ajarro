@@ -6,6 +6,7 @@ use App\Http\BocUrl;
 use App\Jobs\ExtractPageLinks;
 use App\Models\Page;
 use Illuminate\Support\Collection;
+use Illuminate\Queue\Attributes\WithoutRelations;
 
 class ExtractArchiveLinks extends ExtractPageLinks
 {
@@ -13,25 +14,24 @@ class ExtractArchiveLinks extends ExtractPageLinks
      * Create a new job instance.
      */
     public function __construct(
-        protected int $pageId,
+        #[WithoutRelations]
+        protected Page $page,
         protected bool $recreate = false,
     ) {
-        $page = Page::find($pageId);
-
         if (! $page) {
-            $this->logAndFail("The page with id $pageId does not exist.");
+            $this->logAndFail("The page with id {$page->id} does not exist.");
 
             return;
         }
 
         if ($page->name != BocUrl::Archive->name) {
-            $this->logAndFail("The page with id $pageId is not an archive page.");
+            $this->logAndFail("The page with id {$page->id} is not an archive page.");
 
             return;
         }
 
         parent::__construct(
-            pageId: $pageId,
+            page: $page,
             root: BocUrl::Root->value,
             recreate: $recreate
         );

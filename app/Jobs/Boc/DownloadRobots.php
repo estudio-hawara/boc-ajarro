@@ -24,9 +24,8 @@ class DownloadRobots extends DownloadPage
     /**
      * Extract the links of this page.
      */
-    protected function extractLinks(int $pageId): void
+    protected function extractLinks(Page $page): void
     {
-        $page = Page::findOrFail($pageId);
         $content = mb_convert_encoding($page->content, 'UTF-8', 'UTF-8');
 
         Storage::disk('local')

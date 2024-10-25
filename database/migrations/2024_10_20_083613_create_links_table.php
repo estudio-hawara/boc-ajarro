@@ -23,10 +23,13 @@ return new class extends Migration
             $table->timestamp('created_at')
                 ->useCurrent();
 
+            $table->timestamp('download_started_at')
+                ->nullable();
+
             $table->timestamp('disallowed_at')
                 ->nullable();
 
-            $table->index(['page_id', 'created_at', 'disallowed_at']);
+            $table->index(['page_id', 'created_at', 'download_started_at', 'disallowed_at']);
 
         });
     }

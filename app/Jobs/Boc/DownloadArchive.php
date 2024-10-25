@@ -4,6 +4,7 @@ namespace App\Jobs\Boc;
 
 use App\Http\BocUrl;
 use App\Jobs\DownloadPage;
+use App\Models\Page;
 
 class DownloadArchive extends DownloadPage
 {
@@ -22,8 +23,8 @@ class DownloadArchive extends DownloadPage
     /**
      * Extract the links of this page.
      */
-    protected function extractLinks(int $pageId): void
+    protected function extractLinks(Page $page): void
     {
-        ExtractArchiveLinks::dispatch($pageId);
+        ExtractArchiveLinks::dispatch($page);
     }
 }

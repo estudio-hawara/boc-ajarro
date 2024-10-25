@@ -42,6 +42,16 @@ class LinkFactory extends Factory
     }
 
     /**
+     * Indicate when the link download started.
+     */
+    public function downloadStarted(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'download_started_at' => \Carbon\Carbon::now(),
+        ]);
+    }
+
+    /**
      * Indicate that the link has been disallowed by a robots.txt rule.
      */
     public function disallowed(): static

@@ -2,8 +2,12 @@
 
 namespace App\Jobs\Boc;
 
+use App\Actions\GetLinkParams;
 use App\Http\BocUrl;
 use App\Jobs\DownloadPage;
+use App\Models\Link;
+use App\Models\Page;
+use Illuminate\Queue\Attributes\WithoutRelations;
 
 class DownloadBulletinIndex extends DownloadPage
 {
@@ -11,12 +15,18 @@ class DownloadBulletinIndex extends DownloadPage
      * Create a new job instance.
      */
     public function __construct(
-        protected string $year,
-        protected string $bulletin
+        #[WithoutRelations]
+        protected Link $link
     ) {
+        $params = new GetLinkParams($link);
+
+        if (! $params->year || ! $params->bulletin) {
+            throw new \InvalidArgumentException("Incorrect link for downloading a bulletin's index");
+        }
+
         $url = BocUrl::BulletinIndex->value;
-        $url = str_replace('{year}', $year, $url);
-        $url = str_replace('{bulletin}', $bulletin, $url);
+        $url = str_replace('{year}', $params->year, $url);
+        $url = str_replace('{bulletin}', $params->bulletin, $url);
 
         parent::__construct(
             url: $url,
@@ -28,8 +38,19 @@ class DownloadBulletinIndex extends DownloadPage
     /**
      * Extract the links of this page.
      */
-    protected function extractLinks(int $pageId): void
+    protected function extractLinks(Page $page): void
     {
-        ExtractBulletinIndexLinks::dispatch($pageId);
+        ExtractBulletinIndexLinks::dispatch($page);
+    }
+
+    /**
+     * Handle an error during the download.
+     */
+    protected function handleError(): void
+    {
+        $this->link->downloaded_started_at = null;
+        $this->link->save();
+
+        parent::handleError();
     }
 }

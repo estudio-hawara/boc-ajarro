@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Actions\GetParsedDom;
+use App\Models\Page;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -12,7 +13,7 @@ class ExtractPageLinks extends AbstractJob
      * Create a new job instance.
      */
     public function __construct(
-        protected int $pageId,
+        protected Page $page,
         protected string $root,
         protected bool $recreate = false,
     ) {
@@ -25,7 +26,7 @@ class ExtractPageLinks extends AbstractJob
     public function handle(): void
     {
         // Get and parse the page DOM
-        $parsing = new GetParsedDom($this->pageId);
+        $parsing = new GetParsedDom($this->page->id);
 
         if ($parsing->error) {
             $this->logAndFail($parsing->error);
@@ -37,14 +38,15 @@ class ExtractPageLinks extends AbstractJob
         $existingLinkCount = $parsing->page->links->count();
 
         if ($existingLinkCount && ! $this->recreate) {
-            $this->logAndFail("The page with id {$this->pageId} already has links.");
+            $this->logAndFail("The page with id {$this->page->id} already has links.");
 
             return;
         }
 
-        // Extract and store the links
+        // Extract the links
         $links = $this->chosenLinks($parsing->dom->find('a'), $parsing->page->url);
 
+        // ... and store them
         DB::transaction(function () use ($existingLinkCount, $parsing, $links) {
             if ($existingLinkCount && $this->recreate) {
                 $parsing->page->links()->delete();

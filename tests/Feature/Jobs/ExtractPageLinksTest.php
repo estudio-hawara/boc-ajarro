@@ -16,7 +16,7 @@ test('links of a page are extracted', function () {
         </html>';
     $page->save();
 
-    $job = ExtractPageLinks::dispatch($page->id, 'http://localhost');
+    $job = ExtractPageLinks::dispatch($page, 'http://localhost');
 
     // Act
     $job->handle();
@@ -41,7 +41,7 @@ test('links of a page can be recreated if they existed already', function () {
         'url' => 'http://localhost#first',
     ]);
 
-    $job = ExtractPageLinks::dispatch($page->id, 'http://localhost', true);
+    $job = ExtractPageLinks::dispatch($page, 'http://localhost', true);
 
     // Act
     $job->handle();
@@ -66,7 +66,7 @@ test('links are not added twice', function () {
         </html>';
     $page->save();
 
-    $job = ExtractPageLinks::dispatch($page->id, 'http://localhost');
+    $job = ExtractPageLinks::dispatch($page, 'http://localhost');
 
     // Act
     $job->handle();
@@ -78,7 +78,10 @@ test('links are not added twice', function () {
 
 test('fails with error if the page does not exist', function () {
     // Prepare
-    $mock = \Mockery::mock('App\Jobs\ExtractPageLinks[fail]', [1, 'http://localhost']);
+    $page = new Page();
+    $page->id = -1;
+
+    $mock = \Mockery::mock('App\Jobs\ExtractPageLinks[fail]', [$page, 'http://localhost']);
 
     // Act and assert
     $mock->shouldReceive('fail')

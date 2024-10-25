@@ -35,6 +35,22 @@ trait Filters
     }
 
     /**
+     * Links where the download already started.
+     */
+    public function scopeDownloadStarted(Builder $link): void
+    {
+        $link->whereNotNull('download_started_at');
+    }
+
+    /**
+     * Links where the download has not been started yet.
+     */
+    public function scopeNotDownloadStarted(Builder $link): void
+    {
+        $link->whereNot(fn ($query) => $query->scopeDownloadStarted());
+    }
+
+    /**
      * Links that have been disallowed by the robots.txt policies.
      */
     public function scopeDisallowed(Builder $link): void
