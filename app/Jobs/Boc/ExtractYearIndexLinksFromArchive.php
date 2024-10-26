@@ -5,8 +5,8 @@ namespace App\Jobs\Boc;
 use App\Http\BocUrl;
 use App\Jobs\ExtractPageLinks;
 use App\Models\Page;
-use Illuminate\Support\Collection;
 use Illuminate\Queue\Attributes\WithoutRelations;
+use Illuminate\Support\Collection;
 
 class ExtractYearIndexLinksFromArchive extends ExtractPageLinks
 {
@@ -20,23 +20,19 @@ class ExtractYearIndexLinksFromArchive extends ExtractPageLinks
         protected Page $page,
         protected bool $recreate = false,
     ) {
-        if (! $page) {
-            $this->logAndFail("The page with id {$page->id} does not exist.");
-
-            return;
-        }
-
-        if ($page->name != BocUrl::Archive->name) {
-            $this->logAndFail("The page with id {$page->id} is not an archive page.");
-
-            return;
-        }
-
         parent::__construct(
             page: $page,
             root: BocUrl::Root->value,
             recreate: $recreate
         );
+
+        if (! $page->exists()) {
+            $this->logAndDelete("The page with id {$page->id} does not exist.");
+        }
+
+        if ($page->exists() && $page->name != BocUrl::Archive->name) {
+            $this->logAndDelete("The page with id {$page->id} is not an archive page.");
+        }
     }
 
     /**

@@ -16,15 +16,6 @@ class IsLinkAllowed
             Storage::disk('local')->path('robots.txt'),
         );
 
-        if (! $robots->mayIndex($link->url)) {
-            $this->allowed = false;
-
-            $link->disallowed_at = \Carbon\Carbon::now();
-            $link->save();
-
-            return;
-        }
-
-        $this->allowed = true;
+        $this->allowed = $robots->mayIndex($link->url);
     }
 }

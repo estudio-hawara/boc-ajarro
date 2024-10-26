@@ -3,6 +3,7 @@
 use App\Http\BocUrl;
 use App\Jobs\ExtractPageLinks;
 use App\Models\Page;
+use Mockery\MockInterface;
 
 test('links of a page are extracted', function () {
     // Prepare
@@ -66,27 +67,23 @@ test('links are not added twice', function () {
         </html>';
     $page->save();
 
-    $job = ExtractPageLinks::dispatch($page, 'http://localhost');
-
     // Act
-    $job->handle();
+    ExtractPageLinks::dispatch($page, 'http://localhost')->handle();
 
     // Assert
     $page->refresh();
     expect($page->links->count())->toBe(2);
 });
 
-test('fails with error if the page does not exist', function () {
+test('aborts the extraction if the dom could not be parsed', function () {
     // Prepare
-    $page = new Page();
-    $page->id = -1;
-
-    $mock = \Mockery::mock('App\Jobs\ExtractPageLinks[fail]', [$page, 'http://localhost']);
+    $page = Page::factory()->make();
 
     // Act and assert
-    $mock->shouldReceive('fail')
-        ->once();
+    $mock = $this->partialMock(ExtractPageLinks::class, function (MockInterface $mock) {
+        $mock->shouldReceive('delete')->once();
+    });
 
-    /** @var ExtractPageLinks $mock */
+    $mock->__construct($page, 'http://localhost');
     $mock->handle();
 });

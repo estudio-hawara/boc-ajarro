@@ -64,22 +64,22 @@ test('extract page link jobs are used behind the hood', function () {
     expect(is_a(new ExtractBulletinArticleLinksFromBulletinIndex($page), ExtractPageLinks::class))->toBeTrue();
 });
 
-test('fails with error if the page does not exist', function () {
+test('is deleted from the queue if the page does not exist', function () {
     // Prepare, act and assert
     $mock = $this->partialMock(ExtractBulletinArticleLinksFromBulletinIndex::class, function (MockInterface $mock) {
-        $mock->shouldReceive('fail')->once();
+        $mock->shouldReceive('delete')->once();
     });
 
-    $page = new Page();
+    $page = new Page;
     $page->id = -1;
 
     $mock->__construct($page);
 });
 
-test('fails with error if the page is not a bulletin index', function () {
+test('is deleted from the queue if the page is not a bulletin index', function () {
     // Prepare, act and assert
     $mock = $this->partialMock(ExtractBulletinArticleLinksFromBulletinIndex::class, function (MockInterface $mock) {
-        $mock->shouldReceive('fail')->once();
+        $mock->shouldReceive('delete')->once();
     });
 
     $page = Page::factory()->make();

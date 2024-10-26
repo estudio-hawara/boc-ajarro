@@ -15,10 +15,10 @@ abstract class AbstractJob implements ShouldQueue
     /**
      * Log the error message and mark the job as failed.
      */
-    public function logAndFail(string $message)
+    public function logAndDelete(string $message)
     {
-        Log::warning($message);
         $now = (new \DateTime)->format('yyyy-mm-dd hh:ii:ss');
-        $this->fail("$now $message");
+        Log::warning("$now $message");
+        $this->delete();
     }
 }

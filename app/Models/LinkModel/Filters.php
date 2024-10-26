@@ -55,7 +55,7 @@ trait Filters
      */
     public function scopeNotDownloadStarted(Builder $link): void
     {
-        $link->whereNot(fn ($query) => $query->scopeDownloadStarted());
+        $link->whereNot(fn ($query) => $query->downloadStarted());
     }
 
     /**

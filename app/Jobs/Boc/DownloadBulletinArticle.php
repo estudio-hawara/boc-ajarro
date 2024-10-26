@@ -53,7 +53,7 @@ class DownloadBulletinArticle extends DownloadPage
      */
     protected function handleError(): void
     {
-        $this->link->downloaded_started_at = null;
+        $this->link->download_started_at = null;
         $this->link->save();
 
         parent::handleError();

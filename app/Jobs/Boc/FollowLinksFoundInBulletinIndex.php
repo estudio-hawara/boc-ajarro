@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Boc;
 
-use App\Actions\GetLinkParams;
 use App\Actions\IsLinkAllowed;
 use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
@@ -20,7 +19,7 @@ class FollowLinksFoundInBulletinIndex extends AbstractJob
     {
         $links = collect();
 
-        DB::transaction(function () use(&$links) {
+        DB::transaction(function () use (&$links) {
             $links = Link::foundIn(BocUrl::BulletinIndex)
                 ->notDownloaded()
                 ->notDisallowed()

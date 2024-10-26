@@ -19,7 +19,7 @@ class FollowLinksFoundInArchive extends AbstractJob
     {
         $links = collect();
 
-        DB::transaction(function () use(&$links) {
+        DB::transaction(function () use (&$links) {
             $links = Link::foundIn(BocUrl::Archive)
                 ->notDownloaded()
                 ->notDisallowed()

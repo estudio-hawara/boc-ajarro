@@ -18,7 +18,7 @@ test('can parse an html page', function () {
 
 test('fails if the page does not exist', function () {
     // Prepare and act
-    $page = new Page();
+    $page = new Page;
     $page->id = -1;
 
     $parsing = new GetParsedDom($page);

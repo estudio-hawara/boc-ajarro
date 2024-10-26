@@ -31,7 +31,7 @@ class ExtractPageLinks extends AbstractJob
         $parsing = new GetParsedDom($this->page);
 
         if ($parsing->error) {
-            $this->logAndFail($parsing->error);
+            $this->logAndDelete($parsing->error);
 
             return;
         }
@@ -40,7 +40,7 @@ class ExtractPageLinks extends AbstractJob
         $existingLinkCount = $parsing->page->links->count();
 
         if ($existingLinkCount && ! $this->recreate) {
-            $this->logAndFail("The page with id {$this->page->id} already has links.");
+            $this->logAndDelete("The page with id {$this->page->id} already has links.");
 
             return;
         }

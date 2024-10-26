@@ -85,6 +85,6 @@ class DownloadPage extends AbstractJob
      */
     protected function handleError(): void
     {
-        $this->logAndFail("Could't download this page: {$this->url}.");
+        $this->logAndDelete("Could't download this page: {$this->url}.");
     }
 }
