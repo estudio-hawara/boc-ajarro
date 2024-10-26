@@ -32,7 +32,8 @@ return new class extends Migration
             $table->timestamp('disallowed_at')
                 ->nullable();
 
-            $table->index(['page_id', 'type', 'created_at', 'download_started_at', 'disallowed_at']);
+            $table->index(['page_id', 'type', 'created_at']);
+            $table->index(['download_started_at', 'disallowed_at']);
 
         });
     }
