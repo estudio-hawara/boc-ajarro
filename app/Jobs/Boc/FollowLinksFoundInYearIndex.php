@@ -2,14 +2,13 @@
 
 namespace App\Jobs\Boc;
 
-use App\Actions\GetLinkParams;
 use App\Actions\IsLinkAllowed;
 use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
 use App\Models\Link;
 use Illuminate\Support\Facades\DB;
 
-class FollowBulletinIndexLinks extends AbstractJob
+class FollowLinksFoundInYearIndex extends AbstractJob
 {
     protected int $limit = 5;
 
@@ -21,7 +20,7 @@ class FollowBulletinIndexLinks extends AbstractJob
         $links = collect();
 
         DB::transaction(function () use(&$links) {
-            $links = Link::foundIn(BocUrl::BulletinIndex)
+            $links = Link::foundIn(BocUrl::YearIndex)
                 ->notDownloaded()
                 ->notDisallowed()
                 ->orderBy('created_at')
@@ -51,6 +50,6 @@ class FollowBulletinIndexLinks extends AbstractJob
             return;
         }
 
-        DownloadBulletinArticle::dispatch($link);
+        DownloadBulletinIndex::dispatch($link);
     }
 }

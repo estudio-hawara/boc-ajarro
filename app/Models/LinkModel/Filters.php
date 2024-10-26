@@ -35,6 +35,14 @@ trait Filters
     }
 
     /**
+     * Links of certain type.
+     */
+    public function scopeOfType(Builder $link, BocUrl $bocUrl): void
+    {
+        $link->where('type', '=', $bocUrl->name);
+    }
+
+    /**
      * Links where the download already started.
      */
     public function scopeDownloadStarted(Builder $link): void

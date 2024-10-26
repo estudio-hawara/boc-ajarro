@@ -27,16 +27,16 @@ class CountDownloads
 
     public function __construct()
     {
-        $this->totalYearIndex = Link::foundIn(BocUrl::Archive)->count();
-        $this->totalBulletinIndex = Link::foundIn(BocUrl::YearIndex)->count();
-        $this->totalBulletinArticle = Link::foundIn(BocUrl::BulletinIndex)->count();
+        $this->totalYearIndex = Link::ofType(BocUrl::YearIndex)->count();
+        $this->totalBulletinIndex = Link::ofType(BocUrl::BulletinIndex)->count();
+        $this->totalBulletinArticle = Link::ofType(BocUrl::BulletinArticle)->count();
 
-        $this->missingYearIndex = Link::foundIn(BocUrl::Archive)->notDownloaded()->notDisallowed()->count();
-        $this->missingBulletinIndex = Link::foundIn(BocUrl::YearIndex)->notDownloaded()->notDisallowed()->count();
-        $this->missingBulletinArticle = Link::foundIn(BocUrl::BulletinIndex)->notDownloaded()->notDisallowed()->count();
+        $this->missingYearIndex = Link::ofType(BocUrl::YearIndex)->notDownloaded()->notDisallowed()->count();
+        $this->missingBulletinIndex = Link::ofType(BocUrl::BulletinIndex)->notDownloaded()->notDisallowed()->count();
+        $this->missingBulletinArticle = Link::ofType(BocUrl::BulletinArticle)->notDownloaded()->notDisallowed()->count();
 
-        $this->disallowedYearIndex = Link::foundIn(BocUrl::Archive)->disallowed()->count();
-        $this->disallowedBulletinIndex = Link::foundIn(BocUrl::YearIndex)->disallowed()->count();
-        $this->disallowedBulletinArticle = Link::foundIn(BocUrl::BulletinIndex)->disallowed()->count();
+        $this->disallowedYearIndex = Link::ofType(BocUrl::YearIndex)->disallowed()->count();
+        $this->disallowedBulletinIndex = Link::ofType(BocUrl::BulletinIndex)->disallowed()->count();
+        $this->disallowedBulletinArticle = Link::ofType(BocUrl::BulletinArticle)->disallowed()->count();
     }
 }

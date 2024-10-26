@@ -14,16 +14,19 @@ test('the number of finished and missing downloads can be counted', function () 
 
     Link::create([
         'page_id' => $archivePage->id,
+        'type' => BocUrl::YearIndex->name,
         'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1980/',
     ]);
 
     Link::create([
         'page_id' => $archivePage->id,
+        'type' => BocUrl::YearIndex->name,
         'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1981/',
     ]);
 
     Link::create([
         'page_id' => $archivePage->id,
+        'type' => BocUrl::YearIndex->name,
         'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1982/',
         'disallowed_at' => \Carbon\Carbon::now(),
     ]);
@@ -35,11 +38,13 @@ test('the number of finished and missing downloads can be counted', function () 
 
     Link::create([
         'page_id' => $yearIndexPage->id,
+        'type' => BocUrl::BulletinIndex->name,
         'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1980/001/',
     ]);
 
     Link::create([
         'page_id' => $yearIndexPage->id,
+        'type' => BocUrl::BulletinIndex->name,
         'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1981/001/',
     ]);
 
@@ -50,11 +55,13 @@ test('the number of finished and missing downloads can be counted', function () 
 
     Link::create([
         'page_id' => $bulletinIndexPage->id,
+        'type' => BocUrl::BulletinArticle->name,
         'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1980/001/001.html',
     ]);
 
     Link::create([
         'page_id' => $bulletinIndexPage->id,
+        'type' => BocUrl::BulletinArticle->name,
         'url' => 'https://www.gobiernodecanarias.org/boc/archivo/1981/001/001.html',
     ]);
 

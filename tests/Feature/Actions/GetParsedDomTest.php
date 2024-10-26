@@ -9,7 +9,7 @@ test('can parse an html page', function () {
     $page = Page::factory()->create();
 
     // Act
-    $parsing = new GetParsedDom($page->id);
+    $parsing = new GetParsedDom($page);
 
     // Assert
     expect(is_a($parsing->dom, Document::class))->toBeTrue();
@@ -18,7 +18,10 @@ test('can parse an html page', function () {
 
 test('fails if the page does not exist', function () {
     // Prepare and act
-    $parsing = new GetParsedDom(1);
+    $page = new Page();
+    $page->id = -1;
+
+    $parsing = new GetParsedDom($page);
 
     // Assert
     expect(is_string($parsing->error))->toBeTrue();
@@ -36,7 +39,7 @@ test('fails if the page content is from a related page download', function () {
     ]);
 
     // Act
-    $parsing = new GetParsedDom($secondPage->id);
+    $parsing = new GetParsedDom($secondPage);
 
     // Assert
     expect(is_string($parsing->error))->toBeTrue();

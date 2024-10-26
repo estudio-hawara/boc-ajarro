@@ -27,7 +27,7 @@ class Link extends Model
      *
      * @var array
      */
-    protected $fillable = ['page_id', 'url', 'download_started_at', 'disallowed_at'];
+    protected $fillable = ['page_id', 'url', 'type', 'download_started_at', 'disallowed_at'];
 
     /**
      * Return the page content.

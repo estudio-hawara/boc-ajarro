@@ -1,25 +1,25 @@
 <?php
 
 use App\Http\BocUrl;
-use App\Jobs\Boc\ExtractBulletinIndexLinks;
+use App\Jobs\Boc\ExtractBulletinIndexLinksFromYearIndex;
 use App\Jobs\ExtractPageLinks;
 use App\Models\Page;
 use Mockery\MockInterface;
 
-test('only the bulletin article links are extracted', function () {
+test('only the bulletin links are extracted', function () {
     // Prepare
     $page = Page::factory()->make();
-    $page['name'] = BocUrl::BulletinIndex->name;
+    $page['name'] = BocUrl::YearIndex->name;
     $page['content'] = '
         <html>
         <body>
             <a href="#first">Invalid</a>
-            <a href="https://www.gobiernodecanarias.org/boc/1980/001/001.html">Valid</a>
+            <a href="https://www.gobiernodecanarias.org/boc/1980/001/">Valid</a>
         </body>
         </html>';
     $page->save();
 
-    $job = ExtractBulletinIndexLinks::dispatch($page);
+    $job = ExtractBulletinIndexLinksFromYearIndex::dispatch($page);
 
     // Act
     $job->handle();
@@ -27,7 +27,7 @@ test('only the bulletin article links are extracted', function () {
     // Assert
     $page->refresh();
     expect($page->links->count())->toBe(1);
-    expect($page->links->first()->url)->toBe('https://www.gobiernodecanarias.org/boc/1980/001/001.html');
+    expect($page->links->first()->url)->toBe('https://www.gobiernodecanarias.org/boc/1980/001/');
 });
 
 test('links are not added twice', function () {
@@ -37,14 +37,14 @@ test('links are not added twice', function () {
     $page['content'] = '
         <html>
         <body>
-            <a href="https://www.gobiernodecanarias.org/boc/1980/001/001.html">New</a>
-            <a href="https://www.gobiernodecanarias.org/boc/1980/001/001.html">Duplicated</a>
-            <a href="https://www.gobiernodecanarias.org/boc/1980/001/002.html">Also new</a>
+            <a href="https://www.gobiernodecanarias.org/boc/1980/001/">1980</a>
+            <a href="https://www.gobiernodecanarias.org/boc/1980/001/">1980</a>
+            <a href="https://www.gobiernodecanarias.org/boc/1981/001/">1981</a>
         </body>
         </html>';
     $page->save();
 
-    $job = ExtractBulletinIndexLinks::dispatch($page);
+    $job = ExtractBulletinIndexLinksFromYearIndex::dispatch($page);
 
     // Act
     $job->handle();
@@ -61,12 +61,12 @@ test('extract page link jobs are used behind the hood', function () {
     $page->save();
 
     // Assert
-    expect(is_a(new ExtractBulletinIndexLinks($page), ExtractPageLinks::class))->toBeTrue();
+    expect(is_a(new ExtractBulletinIndexLinksFromYearIndex($page), ExtractPageLinks::class))->toBeTrue();
 });
 
 test('fails with error if the page does not exist', function () {
     // Prepare, act and assert
-    $mock = $this->partialMock(ExtractBulletinIndexLinks::class, function (MockInterface $mock) {
+    $mock = $this->partialMock(ExtractBulletinIndexLinksFromYearIndex::class, function (MockInterface $mock) {
         $mock->shouldReceive('fail')->once();
     });
 
@@ -76,9 +76,9 @@ test('fails with error if the page does not exist', function () {
     $mock->__construct($page);
 });
 
-test('fails with error if the page is not a bulletin index', function () {
+test('fails with error if the page is not a year index', function () {
     // Prepare, act and assert
-    $mock = $this->partialMock(ExtractBulletinIndexLinks::class, function (MockInterface $mock) {
+    $mock = $this->partialMock(ExtractBulletinIndexLinksFromYearIndex::class, function (MockInterface $mock) {
         $mock->shouldReceive('fail')->once();
     });
 

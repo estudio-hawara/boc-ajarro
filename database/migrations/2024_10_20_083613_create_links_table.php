@@ -15,6 +15,9 @@ return new class extends Migration
 
             $table->id();
 
+            $table->string('type')
+                ->nullable();
+
             $table->bigInteger('page_id')
                 ->unsigned();
 
@@ -29,7 +32,7 @@ return new class extends Migration
             $table->timestamp('disallowed_at')
                 ->nullable();
 
-            $table->index(['page_id', 'created_at', 'download_started_at', 'disallowed_at']);
+            $table->index(['page_id', 'type', 'created_at', 'download_started_at', 'disallowed_at']);
 
         });
     }

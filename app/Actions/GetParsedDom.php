@@ -7,22 +7,18 @@ use DiDom\Document;
 
 class GetParsedDom
 {
-    public readonly ?Page $page;
-
     public readonly ?Document $dom;
 
     public readonly ?string $error;
 
-    public function __construct(int $pageId)
+    public function __construct(public readonly Page $page)
     {
-        $this->page = Page::find($pageId);
-
-        if (! $this->page) {
-            $this->error = "Could't find a page with id: $pageId.";
+        if (! $page->exists()) {
+            $this->error = "Could't find a page with id: {$page->id}.";
         }
 
-        if ($this->page && ! $this->page->content) {
-            $this->error = "The page with id: $pageId has a content that was previously found, so it will be ignored.";
+        if ($page->exists() && ! $this->page->content) {
+            $this->error = "The page with id: {$page->id} has a content that was previously found, so it will be ignored.";
         }
 
         if (! isset($this->error)) {

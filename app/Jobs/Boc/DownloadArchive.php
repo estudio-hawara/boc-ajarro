@@ -25,6 +25,6 @@ class DownloadArchive extends DownloadPage
      */
     protected function extractLinks(Page $page): void
     {
-        ExtractArchiveLinks::dispatch($page);
+        ExtractYearIndexLinksFromArchive::dispatch($page);
     }
 }

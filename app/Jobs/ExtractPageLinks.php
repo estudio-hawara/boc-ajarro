@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class ExtractPageLinks extends AbstractJob
 {
+    protected ?string $type = null;
+
     /**
      * Create a new job instance.
      */
@@ -26,7 +28,7 @@ class ExtractPageLinks extends AbstractJob
     public function handle(): void
     {
         // Get and parse the page DOM
-        $parsing = new GetParsedDom($this->page->id);
+        $parsing = new GetParsedDom($this->page);
 
         if ($parsing->error) {
             $this->logAndFail($parsing->error);
@@ -45,15 +47,19 @@ class ExtractPageLinks extends AbstractJob
 
         // Extract the links
         $links = $this->chosenLinks($parsing->dom->find('a'), $parsing->page->url);
+        $type = $this->type;
 
         // ... and store them
-        DB::transaction(function () use ($existingLinkCount, $parsing, $links) {
+        DB::transaction(function () use ($existingLinkCount, $parsing, $links, $type) {
             if ($existingLinkCount && $this->recreate) {
                 $parsing->page->links()->delete();
             }
 
             $parsing->page->links()->createMany(
-                $links->map(fn ($link) => ['url' => $link])
+                $links->map(fn ($link) => [
+                    'type' => $type,
+                    'url' => $link,
+                ])
             );
         });
     }

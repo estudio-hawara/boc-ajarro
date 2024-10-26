@@ -40,7 +40,7 @@ class DownloadBulletinIndex extends DownloadPage
      */
     protected function extractLinks(Page $page): void
     {
-        ExtractBulletinIndexLinks::dispatch($page);
+        ExtractBulletinArticleLinksFromBulletinIndex::dispatch($page);
     }
 
     /**

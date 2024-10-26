@@ -2,7 +2,7 @@
 
 use App\Http\BocUrl;
 use App\Jobs\Boc\DownloadYearIndex;
-use App\Jobs\Boc\ExtractYearIndexLinks;
+use App\Jobs\Boc\ExtractBulletinIndexLinksFromYearIndex;
 use App\Jobs\DownloadPage;
 use App\Models\Link;
 use App\Models\Page;
@@ -39,5 +39,5 @@ test('links are extracted using the proper extractor', function () {
     // Act
     $job->handle();
 
-    Queue::assertPushed(ExtractYearIndexLinks::class);
+    Queue::assertPushed(ExtractBulletinIndexLinksFromYearIndex::class);
 });

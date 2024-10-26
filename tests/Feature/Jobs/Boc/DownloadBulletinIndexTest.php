@@ -2,7 +2,7 @@
 
 use App\Http\BocUrl;
 use App\Jobs\Boc\DownloadBulletinIndex;
-use App\Jobs\Boc\ExtractBulletinIndexLinks;
+use App\Jobs\Boc\ExtractBulletinArticleLinksFromBulletinIndex;
 use App\Jobs\DownloadPage;
 use App\Models\Link;
 use App\Models\Page;
@@ -39,5 +39,5 @@ test('links are extracted using the proper extractor', function () {
     // Act
     $job->handle();
 
-    Queue::assertPushed(ExtractBulletinIndexLinks::class);
+    Queue::assertPushed(ExtractBulletinArticleLinksFromBulletinIndex::class);
 });
