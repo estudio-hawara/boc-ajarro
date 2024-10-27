@@ -5,12 +5,15 @@ namespace App\Jobs\Boc;
 use App\Actions\GetLinkParams;
 use App\Http\BocUrl;
 use App\Jobs\DownloadPage;
+use App\Jobs\Traits\ReleasesLinkOnError;
 use App\Models\Link;
 use App\Models\Page;
 use Illuminate\Queue\Attributes\WithoutRelations;
 
 class DownloadBulletinIndex extends DownloadPage
 {
+    use ReleasesLinkOnError;
+
     /**
      * Create a new job instance.
      */
@@ -41,16 +44,5 @@ class DownloadBulletinIndex extends DownloadPage
     protected function extractLinks(Page $page): void
     {
         ExtractLinksFromBulletinIndex::dispatch($page);
-    }
-
-    /**
-     * Handle an error during the download.
-     */
-    protected function handleError(): void
-    {
-        $this->link->download_started_at = null;
-        $this->link->save();
-
-        parent::handleError();
     }
 }

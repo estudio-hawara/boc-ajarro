@@ -54,16 +54,6 @@ test('links are not added twice', function () {
     expect($page->links->count())->toBe(2);
 });
 
-test('extract page link jobs are used behind the hood', function () {
-    // Prepare and act
-    $page = Page::factory()->make();
-    $page['name'] = BocUrl::YearIndex->name;
-    $page->save();
-
-    // Assert
-    expect(is_a(new ExtractLinksFromYearIndex($page), ExtractPageLinks::class))->toBeTrue();
-});
-
 test('is deleted from the queue if the page does not exist', function () {
     // Prepare, act and assert
     $mock = $this->partialMock(ExtractLinksFromYearIndex::class, function (MockInterface $mock) {

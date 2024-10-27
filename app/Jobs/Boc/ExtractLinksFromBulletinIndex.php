@@ -3,14 +3,18 @@
 namespace App\Jobs\Boc;
 
 use App\Http\BocUrl;
-use App\Jobs\ExtractPageLinks;
+use App\Jobs\AbstractJob;
+use App\Jobs\Traits\ExtractsLinks;
+use App\Jobs\Traits\FiltersLinks;
+use App\Jobs\Traits\ReleasesLinkOnError;
 use App\Models\Page;
 use Illuminate\Queue\Attributes\WithoutRelations;
-use Illuminate\Support\Collection;
 
-class ExtractLinksFromBulletinIndex extends ExtractPageLinks
+class ExtractLinksFromBulletinIndex extends AbstractJob
 {
-    protected ?string $type = BocUrl::BulletinArticle->name;
+    use ExtractsLinks;
+    use FiltersLinks;
+    use ReleasesLinkOnError;
 
     /**
      * Create a new job instance.
@@ -20,11 +24,7 @@ class ExtractLinksFromBulletinIndex extends ExtractPageLinks
         protected Page $page,
         protected bool $recreate = false,
     ) {
-        parent::__construct(
-            page: $page,
-            root: BocUrl::Root->value,
-            recreate: $recreate
-        );
+        $this->type = BocUrl::BulletinArticle;
 
         if (! $page->exists()) {
             $this->logAndDelete("The page with id {$page->id} does not exist.");
@@ -36,26 +36,18 @@ class ExtractLinksFromBulletinIndex extends ExtractPageLinks
     }
 
     /**
-     * Function that filters the links that will be kept from this page.
+     * Get the root of the site.
      */
-    protected function chosenLinks(array $allLinks, string $pageUrl): Collection
+    protected function getRoot(): string
     {
-        $links = [];
+        return BocUrl::Root->value;
+    }
 
-        foreach ($allLinks as $link) {
-            $url = urljoin(BocUrl::Root->value, $pageUrl, $link?->href ?? '');
-
-            if (! preg_match(BocUrl::BulletinArticle->pattern(), rtrim($url, '/'))) {
-                continue;
-            }
-
-            if (in_array($url, $links)) {
-                continue;
-            }
-
-            $links[] = $url;
-        }
-
-        return collect($links)->sort();
+    /**
+     * Decide if a link should be kept.
+     */
+    protected function chooseLink(string $url): bool
+    {
+        return preg_match($this->type->pattern(), rtrim($url, '/'));
     }
 }

@@ -5,12 +5,15 @@ namespace App\Jobs\Boc;
 use App\Actions\GetLinkParams;
 use App\Http\BocUrl;
 use App\Jobs\DownloadPage;
+use App\Jobs\Traits\ReleasesLinkOnError;
 use App\Models\Link;
 use App\Models\Page;
 use Illuminate\Queue\Attributes\WithoutRelations;
 
 class DownloadBulletinArticle extends DownloadPage
 {
+    use ReleasesLinkOnError;
+
     /**
      * Create a new job instance.
      */
@@ -47,15 +50,4 @@ class DownloadBulletinArticle extends DownloadPage
     }
 
     // @codeCoverageIgnoreEnd
-
-    /**
-     * Handle an error during the download.
-     */
-    protected function handleError(): void
-    {
-        $this->link->download_started_at = null;
-        $this->link->save();
-
-        parent::handleError();
-    }
 }
