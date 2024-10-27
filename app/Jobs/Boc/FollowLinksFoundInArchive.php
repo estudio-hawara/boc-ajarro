@@ -14,7 +14,7 @@ class FollowLinksFoundInArchive extends AbstractJob
     use AbandonsQueueOnError;
 
     public function __construct(
-        protected int $limit = 5
+        protected int $limit = 50
     ) {}
 
     /**

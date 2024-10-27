@@ -12,6 +12,7 @@
         "filament/filament": "^3.2",
         "imangazaliev/didom": "^2.0",
         "laravel/framework": "^11.9",
+        "laravel/horizon": "^5.29",
         "laravel/tinker": "^2.9",
         "spatie/robots-txt": "^2.2"
     },

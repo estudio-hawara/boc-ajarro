@@ -1,0 +1,105 @@
+services:
+  core:
+    build:
+      context: ./docker
+      target: $IMAGE_TARGET
+      args:
+        USER_ID: $PUID
+        GROUP_ID: $PGID
+    volumes:
+      - .:/var/www/html
+    #healthcheck:
+    #  test: curl --fail http://localhost/ping || exit 1
+    #  start_period: 60s
+    #  retries: 3
+    #  timeout: 5s
+    #restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.${TRAEFIK_SERVICE}.rule=Host(`${HOST}`)"
+      - "traefik.http.routers.${TRAEFIK_SERVICE}.service=${TRAEFIK_SERVICE}"
+      - "traefik.http.services.${TRAEFIK_SERVICE}.loadbalancer.server.port=8080"
+      - "traefik.http.routers.${TRAEFIK_SERVICE}.entrypoints=${TRAEFIK_ENTRYPOINTS}"
+      - "${TRAEFIK_CERTRESOLVER_LABEL}"
+    networks:
+      - postgresql
+      - traefik
+
+  horizon:
+    build:
+      context: ./docker
+      target: $IMAGE_TARGET
+      args:
+        USER_ID: $PUID
+        GROUP_ID: $PGID
+    command: ["php", "/var/www/html/artisan", "horizon"]
+    stop_signal: SIGTERM
+    healthcheck:
+      test: ["CMD", "healthcheck-horizon"]
+      start_period: 10s
+    # restart: always
+    environment:
+      - PHP_POOL_NAME="bocajarro_horizon"
+    volumes:
+      - .:/var/www/html/:cached
+    networks:
+      - postgresql
+      - traefik
+
+  schedule:
+    build:
+      context: ./docker
+      target: $IMAGE_TARGET
+      args:
+        USER_ID: $PUID
+        GROUP_ID: $PGID
+    command: ["php", "/var/www/html/artisan", "schedule:work"]
+    stop_signal: SIGTERM
+    healthcheck:
+      test: ["CMD", "healthcheck-schedule"]
+      start_period: 10s
+    # restart: always
+    environment:
+      - PHP_POOL_NAME="bocajarro_schedule"
+    volumes:
+      - .:/var/www/html/:cached
+    networks:
+      - postgresql
+      - traefik
+
+  redis:
+    image: "redis:7.4"
+    command:
+      # @see https://stackoverflow.com/a/72593084/2940632
+      - /bin/sh
+      - -c
+      # - Double dollars, so that the variable is not expanded by Docker Compose
+      # - Surround by quotes, so that the shell does not split the password
+      # - The ${variable:?message} syntax causes shell to exit with a non-zero
+      #   code and print a message, when the variable is not set or empty
+      - redis-server --requirepass "$${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
+    environment:
+      - REDIS_HOST
+      - REDIS_PASSWORD
+      - REDIS_PORT
+    healthcheck:
+      test: redis-cli ping
+      retries: 3
+      timeout: 5s
+    networks:
+      - postgresql
+      - traefik
+    restart: always
+    volumes:
+      - redis:/data
+
+networks:
+  postgresql:
+    external: true
+  traefik:
+    external: true
+
+volumes:
+  redis:
+    driver: local

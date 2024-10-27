@@ -51,7 +51,5 @@ trait ExtractsLinks
                 ])
             );
         });
-
-        TakeSnapshot::dispatch();
     }
 }
