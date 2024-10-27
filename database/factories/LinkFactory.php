@@ -18,27 +18,48 @@ class LinkFactory extends Factory
      */
     public function definition(): array
     {
-        $foundIn = fake()->randomElement([
-            BocUrl::Archive,
-            BocUrl::YearIndex,
-            BocUrl::BulletinIndex,
-        ]);
-
-        $page = Page::factory()->create([
-            'name' => $foundIn->name,
-            'url' => $foundIn->value,
-        ]);
-
-        $url = BocUrl::{$foundIn->name}->contains()?->value;
-        $url = str_replace('{year}', fake()->year(), $url);
-        $url = str_replace('{bulletin}', fake()->numerify(), $url);
-        $url = str_replace('{article}', fake()->numerify(), $url);
-
         return [
-            'url' => $url,
-            'page_id' => $page->id,
+            'url' => fake()->url(),
+            'page_id' => Page::factory(),
             'created_at' => \Carbon\Carbon::now(),
         ];
+    }
+
+    /**
+     * Indicate that the link is of a certain type.
+     */
+    public function ofType(BocUrl $type): static
+    {
+        return $this->state(function (array $attributes) use ($type) {
+            $params = [
+                'year' => fake()->year(),
+                'bulletin' => fake()->numerify(),
+                'article' => fake()->numerify(),
+            ];
+    
+            $foundIn = $type->foundIn();
+    
+            $pageUrl = $foundIn?->value ?? '';
+            $pageUrl = str_replace('{year}', $params['year'], $pageUrl);
+            $pageUrl = str_replace('{bulletin}', $params['bulletin'], $pageUrl);
+            $pageUrl = str_replace('{article}', $params['article'], $pageUrl);
+    
+            $page = Page::factory(state: [
+                'name' => $foundIn->name,
+                'url' => $pageUrl,
+            ]);
+    
+            $linkUrl = $type?->value ?? '';
+            $linkUrl = str_replace('{year}', $params['year'], $linkUrl);
+            $linkUrl = str_replace('{bulletin}', $params['bulletin'], $linkUrl);
+            $linkUrl = str_replace('{article}', $params['article'], $linkUrl);
+
+            return [
+                'type' => $type->name,
+                'url' => $linkUrl,
+                'page_id' => $page,
+            ];
+        });
     }
 
     /**
