@@ -26,7 +26,8 @@ class YearIndexChart extends ChartWidget
                         ->reverse()
                         ->values()
                         ->toArray(),
-                    'borderColor' => 'blue',
+                    'backgroundColor' => '#2494B3',
+                    'borderColor' => '#2494B3',
                 ],
                 [
                     'label' => 'Missing',
@@ -34,7 +35,8 @@ class YearIndexChart extends ChartWidget
                         ->reverse()
                         ->values()
                         ->toArray(),
-                    'borderColor' => 'orange',
+                    'backgroundColor' => '#E0B841',
+                    'borderColor' => '#E0B841',
                 ],
                 [
                     'label' => 'Disallowed',
@@ -42,7 +44,8 @@ class YearIndexChart extends ChartWidget
                         ->reverse()
                         ->values()
                         ->toArray(),
-                    'borderColor' => 'red',
+                    'backgroundColor' => '#D33F49',
+                    'borderColor' => '#D33F49',
                 ],
             ],
             'labels' => $data->pluck('created_at')
@@ -55,6 +58,6 @@ class YearIndexChart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'line';
+        return 'bar';
     }
 }
