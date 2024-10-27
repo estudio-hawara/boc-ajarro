@@ -11,6 +11,17 @@ enum BocUrl: string
     case BulletinIndex = 'https://www.gobiernodecanarias.org/boc/{year}/{bulletin}/';
     case BulletinArticle = 'https://www.gobiernodecanarias.org/boc/{year}/{bulletin}/{article}.html';
 
+    public static function fromName(string $name): ?BocUrl
+    {
+        foreach (static::cases() as $case) {
+            if ($case->name == $name) {
+                return $case;
+            }
+        }
+
+        return null;
+    }
+       
     public function pattern(): string
     {
         return match ($this) {

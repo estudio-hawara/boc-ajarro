@@ -32,6 +32,11 @@ class LinkResource extends Resource
                     ->sortable()
                     ->searchable(),
 
+                Tables\Columns\TextColumn::make('type')
+                    ->url(fn (Link $record): string => $record->url)
+                    ->sortable()
+                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('url')
                     ->url(fn (Link $record): string => $record->url)
                     ->sortable()
@@ -49,10 +54,30 @@ class LinkResource extends Resource
             ])
             ->filters([
 
+                Tables\Filters\Filter::make('type')
+                    ->form([
+
+                        Forms\Components\Select::make('type')
+                            ->label('Type')
+                            ->options(
+                                collect(array_column(BocUrl::cases(), 'name'))
+                                    ->combine(array_column(BocUrl::cases(), 'name'))->toArray()
+                            ),
+
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['type'],
+                                fn (Builder $query, $name): Builder => $query->ofType(BocUrl::fromName($name))
+                            );
+                    }),
+
                 Tables\Filters\Filter::make('page.name')
                     ->form([
 
                         Forms\Components\Select::make('page.name')
+                            ->label('Found in')
                             ->options(
                                 collect(array_column(BocUrl::cases(), 'name'))
                                     ->combine(array_column(BocUrl::cases(), 'name'))->toArray()

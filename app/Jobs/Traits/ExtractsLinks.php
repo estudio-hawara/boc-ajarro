@@ -4,6 +4,7 @@ namespace App\Jobs\Traits;
 
 use App\Actions\GetParsedDom;
 use App\Http\BocUrl;
+use App\Jobs\TakeSnapshot;
 use Illuminate\Support\Facades\DB;
 
 trait ExtractsLinks
@@ -50,5 +51,7 @@ trait ExtractsLinks
                 ])
             );
         });
+
+        TakeSnapshot::dispatch();
     }
 }
