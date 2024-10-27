@@ -69,7 +69,7 @@ El campo que se utiliza para el vínculo es:
 
 Una vez descargada la página que contiene la lista de años para los que se han publicado boletines, obtenemos la lista con esos enlaces.
 
-El trabajo [ExtractYearIndexLinksFromArchive](app/Jobs/Boc/ExtractYearIndexLinksFromArchive.php) se encarga de leer un registro de la tabla `page`, comprobar que se trata de una descarga del archivo de boletines y, si es así, extraer sus enlaces a las páginas anuales.
+El trabajo [ExtractLinksFromArchive](app/Jobs/Boc/ExtractLinksFromArchive.php) se encarga de leer un registro de la tabla `page`, comprobar que se trata de una descarga del archivo de boletines y, si es así, extraer sus enlaces a las páginas anuales.
 
 Los enlaces descargados se guardan en la tabla `link`, donde se guardan estos campos:
 
@@ -92,7 +92,7 @@ App\Jobs\Boc\DownloadYearIndex::dispatch(1980)->handle();
 
 #### Extracción de enlaces
 
-El trabajo [ExtractBulletinIndexLinksFromYearIndex](app/Jobs/Boc/ExtractBulletinIndexLinksFromYearIndex.php) se encarga de analizar las páginas de índices anuales descargadas y extraer de ellas los enlaces a boletines que contengan.
+El trabajo [ExtractLinksFromYearIndex](app/Jobs/Boc/ExtractLinksFromYearIndex.php) se encarga de analizar las páginas de índices anuales descargadas y extraer de ellas los enlaces a boletines que contengan.
 
 ## Desarrollo
 

@@ -2,7 +2,7 @@
 
 use App\Http\BocUrl;
 use App\Jobs\Boc\DownloadArchive;
-use App\Jobs\Boc\ExtractYearIndexLinksFromArchive;
+use App\Jobs\Boc\ExtractLinksFromArchive;
 use App\Jobs\DownloadPage;
 use Illuminate\Support\Facades\Queue;
 
@@ -23,5 +23,5 @@ test('links are extracted using the proper extractor', function () {
     // Act
     $job->handle();
 
-    Queue::assertPushed(ExtractYearIndexLinksFromArchive::class);
+    Queue::assertPushed(ExtractLinksFromArchive::class);
 });

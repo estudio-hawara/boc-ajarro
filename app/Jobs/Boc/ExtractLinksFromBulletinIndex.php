@@ -8,9 +8,9 @@ use App\Models\Page;
 use Illuminate\Queue\Attributes\WithoutRelations;
 use Illuminate\Support\Collection;
 
-class ExtractBulletinIndexLinksFromYearIndex extends ExtractPageLinks
+class ExtractLinksFromBulletinIndex extends ExtractPageLinks
 {
-    protected ?string $type = BocUrl::BulletinIndex->name;
+    protected ?string $type = BocUrl::BulletinArticle->name;
 
     /**
      * Create a new job instance.
@@ -30,8 +30,8 @@ class ExtractBulletinIndexLinksFromYearIndex extends ExtractPageLinks
             $this->logAndDelete("The page with id {$page->id} does not exist.");
         }
 
-        if ($page->exists() && $page->name != BocUrl::YearIndex->name) {
-            $this->logAndDelete("The page with id {$page->id} is not a year index.");
+        if ($page->exists() && $page->name != BocUrl::BulletinIndex->name) {
+            $this->logAndDelete("The page with id {$page->id} is not a bulletin index.");
         }
     }
 
@@ -45,7 +45,7 @@ class ExtractBulletinIndexLinksFromYearIndex extends ExtractPageLinks
         foreach ($allLinks as $link) {
             $url = urljoin(BocUrl::Root->value, $pageUrl, $link?->href ?? '');
 
-            if (! preg_match(BocUrl::BulletinIndex->pattern(), rtrim($url, '/'))) {
+            if (! preg_match(BocUrl::BulletinArticle->pattern(), rtrim($url, '/'))) {
                 continue;
             }
 

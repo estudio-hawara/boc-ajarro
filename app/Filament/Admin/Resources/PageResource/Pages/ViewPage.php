@@ -46,11 +46,8 @@ class ViewPage extends ViewRecord
 
                 Infolists\Components\TextEntry::make('content')
                     ->getStateUsing(function (Page $record) {
-                        if ($record->name == 'Robots') {
-                            return mb_convert_encoding($record->getContent(), 'UTF-8', 'UTF-8');
-                        }
-
-                        return strip_tags($record->getContent() ?? '');
+                        $content = mb_convert_encoding($record->getContent(), 'UTF-8', 'UTF-8');
+                        return strip_tags($content ?? '');
                     })
                     ->columnSpanFull()
                     ->helperText('Click to copy')

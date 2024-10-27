@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\BocUrl;
-use App\Jobs\Boc\ExtractBulletinIndexLinksFromYearIndex;
+use App\Jobs\Boc\ExtractLinksFromYearIndex;
 use App\Jobs\ExtractPageLinks;
 use App\Models\Page;
 use Mockery\MockInterface;
@@ -19,7 +19,7 @@ test('only the bulletin links are extracted', function () {
         </html>';
     $page->save();
 
-    $job = ExtractBulletinIndexLinksFromYearIndex::dispatch($page);
+    $job = ExtractLinksFromYearIndex::dispatch($page);
 
     // Act
     $job->handle();
@@ -44,7 +44,7 @@ test('links are not added twice', function () {
         </html>';
     $page->save();
 
-    $job = ExtractBulletinIndexLinksFromYearIndex::dispatch($page);
+    $job = ExtractLinksFromYearIndex::dispatch($page);
 
     // Act
     $job->handle();
@@ -61,12 +61,12 @@ test('extract page link jobs are used behind the hood', function () {
     $page->save();
 
     // Assert
-    expect(is_a(new ExtractBulletinIndexLinksFromYearIndex($page), ExtractPageLinks::class))->toBeTrue();
+    expect(is_a(new ExtractLinksFromYearIndex($page), ExtractPageLinks::class))->toBeTrue();
 });
 
 test('is deleted from the queue if the page does not exist', function () {
     // Prepare, act and assert
-    $mock = $this->partialMock(ExtractBulletinIndexLinksFromYearIndex::class, function (MockInterface $mock) {
+    $mock = $this->partialMock(ExtractLinksFromYearIndex::class, function (MockInterface $mock) {
         $mock->shouldReceive('delete')->once();
     });
 
@@ -78,7 +78,7 @@ test('is deleted from the queue if the page does not exist', function () {
 
 test('is deleted from the queue if the page is not a year index', function () {
     // Prepare, act and assert
-    $mock = $this->partialMock(ExtractBulletinIndexLinksFromYearIndex::class, function (MockInterface $mock) {
+    $mock = $this->partialMock(ExtractLinksFromYearIndex::class, function (MockInterface $mock) {
         $mock->shouldReceive('delete')->once();
     });
 

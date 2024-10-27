@@ -2,7 +2,7 @@
 
 use App\Http\BocUrl;
 use App\Jobs\Boc\DownloadBulletinIndex;
-use App\Jobs\Boc\ExtractBulletinArticleLinksFromBulletinIndex;
+use App\Jobs\Boc\ExtractLinksFromBulletinIndex;
 use App\Jobs\DownloadPage;
 use App\Models\Link;
 use App\Models\Page;
@@ -40,7 +40,7 @@ test('links are extracted using the proper extractor', function () {
     // Act
     $job->handle();
 
-    Queue::assertPushed(ExtractBulletinArticleLinksFromBulletinIndex::class);
+    Queue::assertPushed(ExtractLinksFromBulletinIndex::class);
 });
 
 test('download started dates are reset in case of failure', function () {

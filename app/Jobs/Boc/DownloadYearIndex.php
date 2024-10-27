@@ -38,7 +38,7 @@ class DownloadYearIndex extends DownloadPage
      */
     protected function extractLinks(Page $page): void
     {
-        ExtractBulletinIndexLinksFromYearIndex::dispatch($page);
+        ExtractLinksFromYearIndex::dispatch($page);
     }
 
     /**
