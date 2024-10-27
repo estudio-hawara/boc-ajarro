@@ -34,6 +34,6 @@ class Page extends Model
      */
     public function getContent(): string
     {
-        return $this?->content ?? $this->pageWithSharedContent->content;
+        return $this?->content ?? $this?->pageWithSharedContent?->content ?? '';
     }
 }
