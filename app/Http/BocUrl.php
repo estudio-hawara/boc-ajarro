@@ -41,4 +41,14 @@ enum BocUrl: string
             default => null,
         };
     }
+
+    public function foundIn(): ?BocUrl
+    {
+        return match ($this) {
+            BocUrl::YearIndex => BocUrl::Archive,
+            BocUrl::BulletinIndex => BocUrl::YearIndex,
+            BocUrl::BulletinArticle => BocUrl::BulletinIndex,
+            default => null,
+        };
+    }
 }

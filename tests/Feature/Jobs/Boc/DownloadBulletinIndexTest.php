@@ -28,6 +28,8 @@ test('download page jobs are used behind the hood', function () {
 test('links are extracted using the proper extractor', function () {
     // Prepare
     Queue::fake();
+    Http::fake(fn () => Http::response('', 200));
+
     $page = new Page;
     $page->name = BocUrl::YearIndex->name;
 

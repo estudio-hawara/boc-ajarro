@@ -4,7 +4,7 @@ namespace App\Actions;
 
 use App\Models\Link;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Robots\Robots;
+use Spatie\Robots\RobotsTxt;
 
 class IsLinkAllowed
 {
@@ -12,10 +12,8 @@ class IsLinkAllowed
 
     public function __construct(Link $link)
     {
-        $robots = Robots::create()->withTxt(
-            Storage::disk('local')->path('robots.txt'),
-        );
-
-        $this->allowed = $robots->mayIndex($link->url);
+        $this->allowed = RobotsTxt::readFrom(
+            Storage::disk('local')->path('robots.txt')
+        )->allows($link->url);
     }
 }

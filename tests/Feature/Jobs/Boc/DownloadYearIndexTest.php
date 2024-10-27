@@ -27,6 +27,7 @@ test('download page jobs are used behind the hood', function () {
 
 test('links are extracted using the proper extractor', function () {
     // Prepare
+    Http::fake(fn () => Http::response('', 200));
     Queue::fake();
     $page = new Page;
     $page->name = BocUrl::Archive->name;

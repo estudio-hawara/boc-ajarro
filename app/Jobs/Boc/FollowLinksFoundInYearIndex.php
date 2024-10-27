@@ -5,12 +5,17 @@ namespace App\Jobs\Boc;
 use App\Actions\IsLinkAllowed;
 use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
+use App\Jobs\Traits\AbandonsQueueOnError;
 use App\Models\Link;
 use Illuminate\Support\Facades\DB;
 
 class FollowLinksFoundInYearIndex extends AbstractJob
 {
-    protected int $limit = 5;
+    use AbandonsQueueOnError;
+
+    public function __construct(
+        protected int $limit = 5
+    ) {}
 
     /**
      * Execute the job.
