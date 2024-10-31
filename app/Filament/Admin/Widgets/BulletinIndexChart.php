@@ -9,7 +9,7 @@ class BulletinIndexChart extends ChartWidget
 {
     protected static ?string $heading = 'Bulletin indexes';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected function getData(): array
     {

@@ -5,7 +5,6 @@ namespace App\Jobs\Boc;
 use App\Actions\GetLinkParams;
 use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
-use App\Jobs\DownloadPage;
 use App\Jobs\Traits\DownloadsContent;
 use App\Jobs\Traits\ReleasesLinkOnError;
 use App\Models\Link;
@@ -18,7 +17,9 @@ class DownloadYearIndex extends AbstractJob
     use ReleasesLinkOnError;
 
     protected string $url;
+
     protected string $name = BocUrl::YearIndex->name;
+
     protected string $root = BocUrl::Root->value;
 
     /**

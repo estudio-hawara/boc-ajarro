@@ -15,7 +15,9 @@ class DownloadRobots extends AbstractJob
     use ReleasesLinkOnError;
 
     protected string $url = BocUrl::Robots->value;
+
     protected string $name = BocUrl::Robots->name;
+
     protected string $root = BocUrl::Root->value;
 
     /**

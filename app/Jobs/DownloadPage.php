@@ -8,8 +8,8 @@ use App\Models\Page;
 
 class DownloadPage extends AbstractJob
 {
-    use DownloadsContent;
     use AbandonsQueueOnError;
+    use DownloadsContent;
 
     /**
      * Create a new job instance.

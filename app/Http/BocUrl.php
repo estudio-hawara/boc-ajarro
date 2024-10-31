@@ -13,7 +13,7 @@ enum BocUrl: string
 
     public static function fromName(string $name): ?BocUrl
     {
-        foreach (static::cases() as $case) {
+        foreach (self::cases() as $case) {
             if ($case->name == $name) {
                 return $case;
             }
@@ -21,7 +21,7 @@ enum BocUrl: string
 
         return null;
     }
-       
+
     public function pattern(): string
     {
         return match ($this) {

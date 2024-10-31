@@ -17,7 +17,9 @@ class DownloadBulletinIndex extends AbstractJob
     use ReleasesLinkOnError;
 
     protected string $url;
+
     protected string $name = BocUrl::BulletinIndex->name;
+
     protected string $root = BocUrl::Root->value;
 
     /**

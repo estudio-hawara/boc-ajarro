@@ -23,7 +23,7 @@ test('takes the next batch of links to process', function () {
 
     Link::factory()
         ->ofType(BocUrl::YearIndex)
-        ->create(['url' => 'https://www.gobiernodecanarias.org/boc/archivo/1982/']);     
+        ->create(['url' => 'https://www.gobiernodecanarias.org/boc/archivo/1982/']);
 
     // Act
     FollowLinksFoundInArchive::dispatch(limit: 2)->handle();

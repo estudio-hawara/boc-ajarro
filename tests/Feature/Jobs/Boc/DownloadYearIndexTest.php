@@ -3,7 +3,6 @@
 use App\Http\BocUrl;
 use App\Jobs\Boc\DownloadYearIndex;
 use App\Jobs\Boc\ExtractLinksFromYearIndex;
-use App\Jobs\DownloadPage;
 use App\Models\Link;
 use App\Models\Page;
 use Illuminate\Support\Facades\Http;

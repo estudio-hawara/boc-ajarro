@@ -9,7 +9,7 @@ class YearIndexChart extends ChartWidget
 {
     protected static ?string $heading = 'Year indexes';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected function getData(): array
     {

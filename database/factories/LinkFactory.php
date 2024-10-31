@@ -36,19 +36,19 @@ class LinkFactory extends Factory
                 'bulletin' => fake()->numerify(),
                 'article' => fake()->numerify(),
             ];
-    
+
             $foundIn = $type->foundIn();
-    
+
             $pageUrl = $foundIn?->value ?? '';
             $pageUrl = str_replace('{year}', $params['year'], $pageUrl);
             $pageUrl = str_replace('{bulletin}', $params['bulletin'], $pageUrl);
             $pageUrl = str_replace('{article}', $params['article'], $pageUrl);
-    
+
             $page = Page::factory(state: [
                 'name' => $foundIn->name,
                 'url' => $pageUrl,
             ]);
-    
+
             $linkUrl = $type?->value ?? '';
             $linkUrl = str_replace('{year}', $params['year'], $linkUrl);
             $linkUrl = str_replace('{bulletin}', $params['bulletin'], $linkUrl);
