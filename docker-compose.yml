@@ -1,5 +1,8 @@
 services:
   core:
+    depends_on:
+      redis:
+        condition: service_healthy
     build:
       context: ./docker
       target: $IMAGE_TARGET
@@ -22,6 +25,9 @@ services:
       - traefik
 
   horizon:
+    depends_on:
+      redis:
+        condition: service_healthy
     build:
       context: ./docker
       target: $IMAGE_TARGET
@@ -43,6 +49,9 @@ services:
       - traefik
 
   schedule:
+    depends_on:
+      redis:
+        condition: service_healthy
     build:
       context: ./docker
       target: $IMAGE_TARGET
