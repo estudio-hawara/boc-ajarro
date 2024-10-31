@@ -9,22 +9,6 @@ use App\Models\Page;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 
-test('download page jobs are used behind the hood', function () {
-    // Prepare and act
-    $page = new Page;
-    $page->name = BocUrl::Archive->name;
-
-    $link = new Link;
-    $link->url = 'https://www.gobiernodecanarias.org/boc/archivo/1980/';
-    $link->page = $page;
-
-    $job = new DownloadYearIndex($link);
-
-    // Assert
-    expect($job->getUrl())->toBe('https://www.gobiernodecanarias.org/boc/archivo/1980/');
-    expect(is_a($job, DownloadPage::class))->toBeTrue();
-});
-
 test('links are extracted using the proper extractor', function () {
     // Prepare
     Http::fake(fn () => Http::response('', 200));

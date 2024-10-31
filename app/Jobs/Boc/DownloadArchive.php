@@ -3,22 +3,20 @@
 namespace App\Jobs\Boc;
 
 use App\Http\BocUrl;
+use App\Jobs\AbstractJob;
 use App\Jobs\DownloadPage;
+use App\Jobs\Traits\AbandonsQueueOnError;
+use App\Jobs\Traits\DownloadsContent;
 use App\Models\Page;
 
-class DownloadArchive extends DownloadPage
+class DownloadArchive extends AbstractJob
 {
-    /**
-     * Create a new job instance.
-     */
-    public function __construct()
-    {
-        parent::__construct(
-            url: BocUrl::Archive->value,
-            name: BocUrl::Archive->name,
-            root: BocUrl::Root->value
-        );
-    }
+    use DownloadsContent;
+    use AbandonsQueueOnError;
+
+    protected string $url = BocUrl::Archive->value;
+    protected string $name = BocUrl::Archive->name;
+    protected string $root = BocUrl::Root->value;
 
     /**
      * Extract the links of this page.

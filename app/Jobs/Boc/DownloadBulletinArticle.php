@@ -4,15 +4,22 @@ namespace App\Jobs\Boc;
 
 use App\Actions\GetLinkParams;
 use App\Http\BocUrl;
+use App\Jobs\AbstractJob;
 use App\Jobs\DownloadPage;
+use App\Jobs\Traits\DownloadsContent;
 use App\Jobs\Traits\ReleasesLinkOnError;
 use App\Models\Link;
 use App\Models\Page;
 use Illuminate\Queue\Attributes\WithoutRelations;
 
-class DownloadBulletinArticle extends DownloadPage
+class DownloadBulletinArticle extends AbstractJob
 {
+    use DownloadsContent;
     use ReleasesLinkOnError;
+
+    protected string $url;
+    protected string $name = BocUrl::BulletinArticle->name;
+    protected string $root = BocUrl::Root->value;
 
     /**
      * Create a new job instance.
@@ -32,11 +39,7 @@ class DownloadBulletinArticle extends DownloadPage
         $url = str_replace('{bulletin}', $params->bulletin, $url);
         $url = str_replace('{article}', $params->article, $url);
 
-        parent::__construct(
-            url: $url,
-            name: BocUrl::BulletinArticle->name,
-            root: BocUrl::Root->value
-        );
+        $this->url = $url;
     }
 
     // @codeCoverageIgnoreStart

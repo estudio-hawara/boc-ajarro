@@ -3,23 +3,20 @@
 namespace App\Jobs\Boc;
 
 use App\Http\BocUrl;
-use App\Jobs\DownloadPage;
+use App\Jobs\AbstractJob;
+use App\Jobs\Traits\DownloadsContent;
+use App\Jobs\Traits\ReleasesLinkOnError;
 use App\Models\Page;
 use Illuminate\Support\Facades\Storage;
 
-class DownloadRobots extends DownloadPage
+class DownloadRobots extends AbstractJob
 {
-    /**
-     * Create a new job instance.
-     */
-    public function __construct()
-    {
-        parent::__construct(
-            url: BocUrl::Robots->value,
-            name: BocUrl::Robots->name,
-            root: BocUrl::Root->value
-        );
-    }
+    use DownloadsContent;
+    use ReleasesLinkOnError;
+
+    protected string $url = BocUrl::Robots->value;
+    protected string $name = BocUrl::Robots->name;
+    protected string $root = BocUrl::Root->value;
 
     /**
      * Extract the links of this page.
