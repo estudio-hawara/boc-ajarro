@@ -23,8 +23,8 @@ trait DownloadsContent
     {
         $downloads = Queue::size('download');
 
-        if ($downloads >= config('app.max_downloads', 16)) {
-            $this->logAndDelete('The maximum number of downloads was reached, so a scheduled download job was ignored.');
+        if ($downloads >= config('app.max_downloads', 50)) {
+            $this->logAndDelete("The maximum number of $downloads downloads was reached, so a scheduled download job was ignored.");
 
             return;
         }

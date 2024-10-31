@@ -18,8 +18,8 @@ trait ExtractsLinks
     {
         $extractions = Queue::size('extract');
 
-        if ($extractions >= config('app.max_extractions', 128)) {
-            $this->logAndDelete('The maximum number of extractions was reached, so a scheduled download job was ignored.');
+        if ($extractions >= config('app.max_extractions', 250)) {
+            $this->logAndDelete("The maximum number of $extractions extractions was reached, so a scheduled download job was ignored.");
 
             return;
         }
