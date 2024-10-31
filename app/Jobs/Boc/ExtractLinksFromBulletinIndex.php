@@ -33,6 +33,8 @@ class ExtractLinksFromBulletinIndex extends AbstractJob
         if ($page->exists() && $page->name != BocUrl::BulletinIndex->name) {
             $this->logAndDelete("The page with id {$page->id} is not a bulletin index.");
         }
+
+        $this->onQueue('extract');
     }
 
     /**

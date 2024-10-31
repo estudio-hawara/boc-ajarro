@@ -36,6 +36,8 @@ class ExtractLinksFromYearIndex extends AbstractJob
         if ($page->exists() && $page->name != BocUrl::YearIndex->name) {
             $this->logAndDelete("The page with id {$page->id} is not a year index.");
         }
+
+        $this->onQueue('extract');
     }
 
     /**

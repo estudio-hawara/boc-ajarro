@@ -8,6 +8,7 @@ use App\Jobs\AbstractJob;
 use App\Jobs\Traits\AbandonsQueueOnError;
 use App\Models\Link;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
 
 class FollowLinksFoundInArchive extends AbstractJob
 {
@@ -15,13 +16,23 @@ class FollowLinksFoundInArchive extends AbstractJob
 
     public function __construct(
         protected int $limit = 50
-    ) {}
+    ) {
+        $this->onQueue('download');
+    }
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
+        $downloads = Queue::size('download');
+
+        if ($downloads >= config('app.max_downloads', 16)) {
+            $this->logAndDelete('The maximum number of downloads was reached, so a scheduled download job was ignored.');
+
+            return;
+        }
+
         $links = collect();
 
         DB::transaction(function () use (&$links) {

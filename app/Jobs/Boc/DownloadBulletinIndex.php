@@ -38,6 +38,7 @@ class DownloadBulletinIndex extends AbstractJob
         $url = str_replace('{bulletin}', $params->bulletin, $url);
 
         $this->url = $url;
+        $this->onQueue('download');
     }
 
     /**

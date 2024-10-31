@@ -37,6 +37,7 @@ class DownloadYearIndex extends AbstractJob
         $url = str_replace('{year}', $params->year, BocUrl::YearIndex->value);
 
         $this->url = $url;
+        $this->onQueue('download');
     }
 
     /**

@@ -19,6 +19,16 @@ class DownloadArchive extends AbstractJob
     protected string $root = BocUrl::Root->value;
 
     /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->onQueue('download');
+    }
+
+    /**
      * Extract the links of this page.
      */
     protected function extractLinks(Page $page): void

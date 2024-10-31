@@ -40,6 +40,7 @@ class DownloadBulletinArticle extends AbstractJob
         $url = str_replace('{article}', $params->article, $url);
 
         $this->url = $url;
+        $this->onQueue('download');
     }
 
     // @codeCoverageIgnoreStart

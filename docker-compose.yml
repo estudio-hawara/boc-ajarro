@@ -8,12 +8,7 @@ services:
         GROUP_ID: $PGID
     volumes:
       - .:/var/www/html
-    #healthcheck:
-    #  test: curl --fail http://localhost/ping || exit 1
-    #  start_period: 60s
-    #  retries: 3
-    #  timeout: 5s
-    #restart: always
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
@@ -38,7 +33,7 @@ services:
     healthcheck:
       test: ["CMD", "healthcheck-horizon"]
       start_period: 10s
-    # restart: always
+    restart: always
     environment:
       - PHP_POOL_NAME="bocajarro_horizon"
     volumes:
@@ -59,7 +54,7 @@ services:
     healthcheck:
       test: ["CMD", "healthcheck-schedule"]
       start_period: 10s
-    # restart: always
+    restart: always
     environment:
       - PHP_POOL_NAME="bocajarro_schedule"
     volumes:

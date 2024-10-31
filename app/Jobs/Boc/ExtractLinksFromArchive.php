@@ -33,6 +33,8 @@ class ExtractLinksFromArchive extends AbstractJob
         if ($page->exists() && $page->name != BocUrl::Archive->name) {
             $this->logAndDelete("The page with id {$page->id} is not an archive page.");
         }
+
+        $this->onQueue('extract');
     }
 
     /**
