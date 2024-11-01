@@ -37,7 +37,7 @@ return [
     |
     */
 
-    'max_downloads' => env('APP_MAX_DOWNLOADS', 50),
+    'max_downloads' => env('APP_MAX_DOWNLOADS', 250),
     'max_extractions' => env('APP_MAX_EXTRACTIONS', 250),
 
     /*
