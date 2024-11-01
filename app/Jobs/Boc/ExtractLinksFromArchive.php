@@ -24,7 +24,11 @@ class ExtractLinksFromArchive extends AbstractJob
         protected Page $page,
         protected bool $recreate = false,
     ) {
-        $this->type = BocUrl::YearIndex;
+        if ($this->maxQueueSizeExceeded()) {
+            $this->logAndDelete('The maximum number of extractions was reached, so an extraction job was ignored.');
+
+            return;
+        }
 
         if (! $page->exists()) {
             $this->logAndDelete("The page with id {$page->id} does not exist.");
@@ -38,12 +42,7 @@ class ExtractLinksFromArchive extends AbstractJob
             return;
         }
 
-        if ($this->maxQueueSizeExceeded()) {
-            $this->logAndDelete('The maximum number of extractions was reached, so an extraction job was ignored.');
-
-            return;
-        }
-
+        $this->type = BocUrl::YearIndex;
         $this->onQueue('extract');
     }
 

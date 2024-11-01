@@ -22,6 +22,12 @@ class ExtractContentFromArticle extends AbstractJob
         protected Page $page,
         protected bool $recreate = false,
     ) {
+        if ($this->maxQueueSizeExceeded()) {
+            $this->logAndDelete('The maximum number of extractions was reached, so an extraction job was ignored.');
+
+            return;
+        }
+
         if (! $page->exists()) {
             $this->logAndDelete("The page with id {$page->id} does not exist.");
 
@@ -30,12 +36,6 @@ class ExtractContentFromArticle extends AbstractJob
 
         if ($page->exists() && $page->name != BocUrl::BulletinArticle->name) {
             $this->logAndDelete("The page with id {$page->id} is not a bulletin article.");
-
-            return;
-        }
-
-        if ($this->maxQueueSizeExceeded()) {
-            $this->logAndDelete('The maximum number of extractions was reached, so an extraction job was ignored.');
 
             return;
         }
