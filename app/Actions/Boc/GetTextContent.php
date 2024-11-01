@@ -52,6 +52,10 @@ class GetTextContent
                 continue;
             }
 
+            if (trim($element->text()) == 'Descargar en formato pdf') {
+                continue;
+            }
+
             yield $element;
         }
     }
