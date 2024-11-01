@@ -34,13 +34,13 @@ test('only the bulletin links are extracted', function () {
 test('links are not added twice', function () {
     // Prepare
     $page = Page::factory()->make();
-    $page['name'] = BocUrl::Archive->name;
+    $page['name'] = BocUrl::YearIndex->name;
     $page['content'] = '
         <html>
         <body>
-            <a href="https://www.gobiernodecanarias.org/boc/1980/001/">1980</a>
-            <a href="https://www.gobiernodecanarias.org/boc/1980/001/">1980</a>
-            <a href="https://www.gobiernodecanarias.org/boc/1981/001/">1981</a>
+            <a href="https://www.gobiernodecanarias.org/boc/1980/001/">1980/001</a>
+            <a href="https://www.gobiernodecanarias.org/boc/1980/002/">1980/002</a>
+            <a href="https://www.gobiernodecanarias.org/boc/1980/002/">1980/002</a>
         </body>
         </html>';
     $page->save();

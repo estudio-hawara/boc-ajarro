@@ -34,7 +34,7 @@ test('only the bulletin article links are extracted', function () {
 test('links are not added twice', function () {
     // Prepare
     $page = Page::factory()->make();
-    $page['name'] = BocUrl::Archive->name;
+    $page['name'] = BocUrl::BulletinIndex->name;
     $page['content'] = '
         <html>
         <body>
