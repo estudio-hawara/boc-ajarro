@@ -6,7 +6,6 @@ use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
 use App\Jobs\Traits\ExtractsLinks;
 use App\Jobs\Traits\FiltersLinks;
-use App\Jobs\Traits\ReleasesLinkOnError;
 use App\Models\Page;
 use Illuminate\Queue\Attributes\WithoutRelations;
 
