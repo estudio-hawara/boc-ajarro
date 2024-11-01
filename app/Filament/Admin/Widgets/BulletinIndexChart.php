@@ -5,6 +5,8 @@ namespace App\Filament\Admin\Widgets;
 use App\Models\Snapshot;
 use Filament\Widgets\ChartWidget;
 
+// @codeCoverageIgnoreStart
+
 class BulletinIndexChart extends ChartWidget
 {
     protected static ?string $heading = 'Bulletin indexes';
@@ -21,7 +23,7 @@ class BulletinIndexChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Found',
+                    'label' => 'Links to bulletin indexes',
                     'data' => $data->pluck('total_bulletin_index')
                         ->reverse()
                         ->values()
@@ -30,7 +32,7 @@ class BulletinIndexChart extends ChartWidget
                     'borderColor' => '#2494B3',
                 ],
                 [
-                    'label' => 'Missing',
+                    'label' => 'Missing bulletin indexes',
                     'data' => $data->pluck('missing_bulletin_index')
                         ->reverse()
                         ->values()
@@ -39,7 +41,7 @@ class BulletinIndexChart extends ChartWidget
                     'borderColor' => '#E0B841',
                 ],
                 [
-                    'label' => 'Disallowed',
+                    'label' => 'Disallowed bulletin indexes',
                     'data' => $data->pluck('disallowed_bulletin_index')
                         ->reverse()
                         ->values()
@@ -61,3 +63,5 @@ class BulletinIndexChart extends ChartWidget
         return 'bar';
     }
 }
+
+// @codeCoverageIgnoreEnd

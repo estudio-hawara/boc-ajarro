@@ -5,6 +5,8 @@ namespace App\Filament\Admin\Widgets;
 use App\Models\Snapshot;
 use Filament\Widgets\ChartWidget;
 
+// @codeCoverageIgnoreStart
+
 class BulletinArticleChart extends ChartWidget
 {
     protected static ?string $heading = 'Bulletin articles';
@@ -21,7 +23,7 @@ class BulletinArticleChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Found',
+                    'label' => 'Links to bulletin articles',
                     'data' => $data->pluck('total_bulletin_article')
                         ->reverse()
                         ->values()
@@ -30,7 +32,7 @@ class BulletinArticleChart extends ChartWidget
                     'borderColor' => '#2494B3',
                 ],
                 [
-                    'label' => 'Missing',
+                    'label' => 'Missing bulletin articles',
                     'data' => $data->pluck('missing_bulletin_article')
                         ->reverse()
                         ->values()
@@ -39,7 +41,7 @@ class BulletinArticleChart extends ChartWidget
                     'borderColor' => '#E0B841',
                 ],
                 [
-                    'label' => 'Disallowed',
+                    'label' => 'Disallowed bulletin articles',
                     'data' => $data->pluck('disallowed_bulletin_article')
                         ->reverse()
                         ->values()
@@ -61,3 +63,5 @@ class BulletinArticleChart extends ChartWidget
         return 'bar';
     }
 }
+
+// @codeCoverageIgnoreEnd

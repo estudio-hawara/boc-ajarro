@@ -5,6 +5,8 @@ namespace App\Filament\Admin\Widgets;
 use App\Models\Snapshot;
 use Filament\Widgets\ChartWidget;
 
+// @codeCoverageIgnoreStart
+
 class YearIndexChart extends ChartWidget
 {
     protected static ?string $heading = 'Year indexes';
@@ -21,7 +23,7 @@ class YearIndexChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Found',
+                    'label' => 'Links to year indexes',
                     'data' => $data->pluck('total_year_index')
                         ->reverse()
                         ->values()
@@ -30,7 +32,7 @@ class YearIndexChart extends ChartWidget
                     'borderColor' => '#2494B3',
                 ],
                 [
-                    'label' => 'Missing',
+                    'label' => 'Missing year indexes',
                     'data' => $data->pluck('missing_year_index')
                         ->reverse()
                         ->values()
@@ -39,7 +41,7 @@ class YearIndexChart extends ChartWidget
                     'borderColor' => '#E0B841',
                 ],
                 [
-                    'label' => 'Disallowed',
+                    'label' => 'Disallowed year indexes',
                     'data' => $data->pluck('disallowed_year_index')
                         ->reverse()
                         ->values()
@@ -61,3 +63,5 @@ class YearIndexChart extends ChartWidget
         return 'bar';
     }
 }
+
+// @codeCoverageIgnoreEnd
