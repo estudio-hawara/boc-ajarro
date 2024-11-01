@@ -2,20 +2,6 @@
 
 **Boc·ajarro** es una aplicación que facilita la gestión de la descarga del Boletín Oficial de Canarias y el procesamiento de los datos descargados para su análisis y estudio.
 
-## Procesos no destructivos
-
-**Boc·ajarro** separa la descarga del procesamiento de los datos. Cuando se descarga contenido de una página, los datos se guardan exactamente como fueron descargados.
-
-Los procesos que se ejecutan más tarde sobre los datos descargados, crean nuevos registros en tablas específicas para datos procesados, sin modificar en ningún momento lo descargado.
-
-### Reejecuciones parciales
-
-Esto facilita que en caso de fallo, o de mejora de los algoritmos de procesamiento, no sea necesaria una nueva ejecución entera del proceso, pudiendo ejecutarse solo las partes que hayan cambiado.
-
-### Auditorías a posterior
-
-Además de facilitar las reejecuciones de los procesos en caso de fallo, la no destructividad también facilita la auditoría de los procesos, al poder comprobarse los mismos desde su entrada original de datos.
-
 ## Documentación
 
 La documentación está disponible en la carpeta [docs/](docs/).
