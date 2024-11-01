@@ -3,6 +3,8 @@
 use App\Http\BocUrl;
 use App\Jobs\Boc\ExtractLinksFromYearIndex;
 use App\Models\Page;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Queue;
 use Mockery\MockInterface;
 
 test('only the bulletin links are extracted', function () {
@@ -76,4 +78,23 @@ test('is deleted from the queue if the page is not a year index', function () {
     $page->save();
 
     $mock->__construct($page);
+});
+
+test('is not executed if the queue is already at its maximum', function () {
+    // Prepare
+    Config::set('app.max_extractions', 2);
+    Queue::fake();
+
+    $page = Page::factory()->make();
+    $page['name'] = BocUrl::YearIndex->name;
+    $page['content'] = '';
+    $page->save();
+
+    // Act
+    ExtractLinksFromYearIndex::dispatch($page);
+    ExtractLinksFromYearIndex::dispatch($page);
+    ExtractLinksFromYearIndex::dispatch($page);
+
+    // Assert
+    expect(Queue::size('extract'))->toBe(2);
 });

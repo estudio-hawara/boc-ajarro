@@ -4,6 +4,7 @@ use App\Http\BocUrl;
 use App\Jobs\Boc\DownloadYearIndex;
 use App\Jobs\Boc\FollowLinksFoundInArchive;
 use App\Models\Link;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
@@ -62,4 +63,18 @@ test('doesn\'t follow disallowed links', function () {
 
     // Assert
     Queue::assertNotPushed(DownloadYearIndex::class);
+});
+
+test('is not executed if the queue is already at its maximum', function () {
+    // Prepare
+    Config::set('app.max_downloads', 2);
+    Queue::fake();
+
+    // Act
+    FollowLinksFoundInArchive::dispatch();
+    FollowLinksFoundInArchive::dispatch();
+    FollowLinksFoundInArchive::dispatch();
+
+    // Assert
+    expect(Queue::size('download'))->toBe(2);
 });

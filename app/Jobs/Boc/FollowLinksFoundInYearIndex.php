@@ -6,17 +6,24 @@ use App\Actions\IsLinkAllowed;
 use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
 use App\Jobs\Traits\AbandonsQueueOnError;
+use App\Jobs\Traits\ChecksDownloadQueueSize;
 use App\Models\Link;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Queue;
 
 class FollowLinksFoundInYearIndex extends AbstractJob
 {
     use AbandonsQueueOnError;
+    use ChecksDownloadQueueSize;
 
     public function __construct(
         protected int $limit = 50
     ) {
+        if ($this->maxQueueSizeExceeded()) {
+            $this->logAndDelete('The maximum number of downloads was reached, so a download job was ignored.');
+
+            return;
+        }
+
         $this->onQueue('download');
     }
 
@@ -25,14 +32,6 @@ class FollowLinksFoundInYearIndex extends AbstractJob
      */
     public function handle(): void
     {
-        $downloads = Queue::size('download');
-
-        if ($downloads >= config('app.max_downloads', 50)) {
-            $this->logAndDelete("The maximum number of $downloads downloads was reached, so a scheduled (follow links found in year index) download job was ignored.");
-
-            return;
-        }
-
         $links = collect();
 
         DB::transaction(function () use (&$links) {

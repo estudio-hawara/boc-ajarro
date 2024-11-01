@@ -5,6 +5,7 @@ use App\Jobs\Boc\DownloadBulletinIndex;
 use App\Jobs\Boc\ExtractLinksFromBulletinIndex;
 use App\Models\Link;
 use App\Models\Page;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 
@@ -66,3 +67,21 @@ test('throws an exception for links of the wrong type', function () {
 
     // Assert
 })->throws(\InvalidArgumentException::class);
+
+test('is not executed if the queue is already at its maximum', function () {
+    // Prepare
+    Config::set('app.max_downloads', 2);
+    Queue::fake();
+
+    $link = Link::factory()
+        ->ofType(BocUrl::BulletinIndex)
+        ->create();
+
+    // Act
+    DownloadBulletinIndex::dispatch($link);
+    DownloadBulletinIndex::dispatch($link);
+    DownloadBulletinIndex::dispatch($link);
+
+    // Assert
+    expect(Queue::size('download'))->toBe(2);
+});

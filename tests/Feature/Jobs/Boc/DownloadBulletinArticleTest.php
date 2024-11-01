@@ -4,7 +4,9 @@ use App\Http\BocUrl;
 use App\Jobs\Boc\DownloadBulletinArticle;
 use App\Models\Link;
 use App\Models\Page;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Queue;
 
 test('download started dates are reset in case of failure', function () {
     // Prepare
@@ -44,3 +46,21 @@ test('throws an exception for links of the wrong type', function () {
 
     // Assert
 })->throws(\InvalidArgumentException::class);
+
+test('is not executed if the queue is already at its maximum', function () {
+    // Prepare
+    Config::set('app.max_downloads', 2);
+    Queue::fake();
+
+    $link = Link::factory()
+        ->ofType(BocUrl::BulletinArticle)
+        ->create();
+
+    // Act
+    DownloadBulletinArticle::dispatch($link);
+    DownloadBulletinArticle::dispatch($link);
+    DownloadBulletinArticle::dispatch($link);
+
+    // Assert
+    expect(Queue::size('download'))->toBe(2);
+});

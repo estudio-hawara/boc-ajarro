@@ -3,6 +3,8 @@
 use App\Http\BocUrl;
 use App\Jobs\Boc\ExtractLinksFromBulletinIndex;
 use App\Models\Page;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Queue;
 use Mockery\MockInterface;
 
 test('only the bulletin article links are extracted', function () {
@@ -76,4 +78,23 @@ test('is deleted from the queue if the page is not a bulletin index', function (
     $page->save();
 
     $mock->__construct($page);
+});
+
+test('is not executed if the queue is already at its maximum', function () {
+    // Prepare
+    Config::set('app.max_extractions', 2);
+    Queue::fake();
+
+    $page = Page::factory()->make();
+    $page['name'] = BocUrl::BulletinIndex->name;
+    $page['content'] = '';
+    $page->save();
+
+    // Act
+    ExtractLinksFromBulletinIndex::dispatch($page);
+    ExtractLinksFromBulletinIndex::dispatch($page);
+    ExtractLinksFromBulletinIndex::dispatch($page);
+
+    // Assert
+    expect(Queue::size('extract'))->toBe(2);
 });

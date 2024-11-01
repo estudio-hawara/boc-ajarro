@@ -5,6 +5,7 @@ namespace App\Jobs\Boc;
 use App\Actions\GetLinkParams;
 use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
+use App\Jobs\Traits\ChecksDownloadQueueSize;
 use App\Jobs\Traits\DownloadsContent;
 use App\Jobs\Traits\ReleasesLinkOnError;
 use App\Models\Link;
@@ -13,6 +14,7 @@ use Illuminate\Queue\Attributes\WithoutRelations;
 
 class DownloadBulletinArticle extends AbstractJob
 {
+    use ChecksDownloadQueueSize;
     use DownloadsContent;
     use ReleasesLinkOnError;
 
@@ -29,6 +31,12 @@ class DownloadBulletinArticle extends AbstractJob
         #[WithoutRelations]
         protected Link $link
     ) {
+        if ($this->maxQueueSizeExceeded()) {
+            $this->logAndDelete('The maximum number of downloads was reached, so a download job was ignored.');
+
+            return;
+        }
+
         $params = new GetLinkParams($link);
 
         if (! $params->year || ! $params->bulletin || ! $params->article) {

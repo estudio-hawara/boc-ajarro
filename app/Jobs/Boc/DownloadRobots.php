@@ -4,6 +4,7 @@ namespace App\Jobs\Boc;
 
 use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
+use App\Jobs\Traits\ChecksDownloadQueueSize;
 use App\Jobs\Traits\DownloadsContent;
 use App\Jobs\Traits\ReleasesLinkOnError;
 use App\Models\Page;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class DownloadRobots extends AbstractJob
 {
+    use ChecksDownloadQueueSize;
     use DownloadsContent;
     use ReleasesLinkOnError;
 
@@ -27,6 +29,12 @@ class DownloadRobots extends AbstractJob
      */
     public function __construct()
     {
+        if ($this->maxQueueSizeExceeded()) {
+            $this->logAndDelete('The maximum number of downloads was reached, so a download job was ignored.');
+
+            return;
+        }
+
         $this->onQueue('download');
     }
 

@@ -4,7 +4,6 @@ namespace App\Jobs\Traits;
 
 use App\Models\Page;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Queue;
 
 trait DownloadsContent
 {
@@ -21,14 +20,6 @@ trait DownloadsContent
      */
     public function handle(): void
     {
-        $downloads = Queue::size('download');
-
-        if ($downloads >= config('app.max_downloads', 50)) {
-            $this->logAndDelete("The maximum number of $downloads downloads was reached, so a scheduled download job was ignored.");
-
-            return;
-        }
-
         $response = Http::get($this->getUrl());
 
         if (! $response->successful()) {

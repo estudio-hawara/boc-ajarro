@@ -3,6 +3,8 @@
 use App\Http\BocUrl;
 use App\Jobs\Boc\ExtractLinksFromArchive;
 use App\Models\Page;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Queue;
 use Mockery\MockInterface;
 
 test('only the year links are extracted', function () {
@@ -76,4 +78,23 @@ test('is deleted from the queue if the page is not an archive page', function ()
     $page->save();
 
     $mock->__construct(page: $page);
+});
+
+test('is not executed if the queue is already at its maximum', function () {
+    // Prepare
+    Config::set('app.max_extractions', 2);
+    Queue::fake();
+
+    $page = Page::factory()->make();
+    $page['name'] = BocUrl::Archive->name;
+    $page['content'] = '';
+    $page->save();
+
+    // Act
+    ExtractLinksFromArchive::dispatch($page);
+    ExtractLinksFromArchive::dispatch($page);
+    ExtractLinksFromArchive::dispatch($page);
+
+    // Assert
+    expect(Queue::size('extract'))->toBe(2);
 });

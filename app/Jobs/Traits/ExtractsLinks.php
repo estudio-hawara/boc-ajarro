@@ -5,7 +5,6 @@ namespace App\Jobs\Traits;
 use App\Actions\GetParsedDom;
 use App\Http\BocUrl;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Queue;
 
 trait ExtractsLinks
 {
@@ -16,14 +15,6 @@ trait ExtractsLinks
      */
     public function handle(): void
     {
-        $extractions = Queue::size('extract');
-
-        if ($extractions >= config('app.max_extractions', 250)) {
-            $this->logAndDelete("The maximum number of $extractions extractions was reached, so a scheduled download job was ignored.");
-
-            return;
-        }
-
         // Get and parse the page DOM
         $parsing = new GetParsedDom($this->page);
 

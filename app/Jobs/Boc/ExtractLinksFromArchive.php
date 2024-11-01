@@ -4,6 +4,7 @@ namespace App\Jobs\Boc;
 
 use App\Http\BocUrl;
 use App\Jobs\AbstractJob;
+use App\Jobs\Traits\ChecksExtractionQueueSize;
 use App\Jobs\Traits\ExtractsLinks;
 use App\Jobs\Traits\FiltersLinks;
 use App\Models\Page;
@@ -11,6 +12,7 @@ use Illuminate\Queue\Attributes\WithoutRelations;
 
 class ExtractLinksFromArchive extends AbstractJob
 {
+    use ChecksExtractionQueueSize;
     use ExtractsLinks;
     use FiltersLinks;
 
@@ -26,10 +28,20 @@ class ExtractLinksFromArchive extends AbstractJob
 
         if (! $page->exists()) {
             $this->logAndDelete("The page with id {$page->id} does not exist.");
+
+            return;
         }
 
         if ($page->exists() && $page->name != BocUrl::Archive->name) {
             $this->logAndDelete("The page with id {$page->id} is not an archive page.");
+
+            return;
+        }
+
+        if ($this->maxQueueSizeExceeded()) {
+            $this->logAndDelete('The maximum number of extractions was reached, so an extraction job was ignored.');
+
+            return;
         }
 
         $this->onQueue('extract');
