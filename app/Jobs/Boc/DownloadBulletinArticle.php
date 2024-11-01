@@ -14,8 +14,8 @@ use Illuminate\Queue\Attributes\WithoutRelations;
 
 class DownloadBulletinArticle extends AbstractJob
 {
-    use ChecksDownloadQueueSize;
     use DownloadsContent;
+    use ChecksDownloadQueueSize;
     use ReleasesLinkOnError;
 
     protected string $url;
@@ -40,7 +40,9 @@ class DownloadBulletinArticle extends AbstractJob
         $params = new GetLinkParams($link);
 
         if (! $params->year || ! $params->bulletin || ! $params->article) {
-            throw new \InvalidArgumentException("Incorrect link for downloading a bulletin's article");
+            $this->logAndDelete("Incorrect link for downloading a bulletin's article");
+
+            return;
         }
 
         $url = BocUrl::BulletinArticle->value;

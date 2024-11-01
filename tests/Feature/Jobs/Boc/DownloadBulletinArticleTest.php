@@ -7,6 +7,7 @@ use App\Models\Page;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
+use Mockery\MockInterface;
 
 test('download started dates are reset in case of failure', function () {
     // Prepare
@@ -32,7 +33,7 @@ test('download started dates are reset in case of failure', function () {
     expect($link->download_started_at)->toBeNull();
 });
 
-test('throws an exception for links of the wrong type', function () {
+test('does not get executed if the link is of the wrong type', function () {
     // Prepare
     $page = new Page;
     $page->name = BocUrl::Archive->name;
@@ -41,11 +42,13 @@ test('throws an exception for links of the wrong type', function () {
     $link->url = 'https://www.gobiernodecanarias.org/boc/archivo/1980/';
     $link->page = $page;
 
-    // Act
-    new DownloadBulletinArticle($link);
+    // Act and assert
+    $mock = $this->partialMock(DownloadBulletinArticle::class, function (MockInterface $mock) {
+        $mock->shouldReceive('logAndDelete')->once();
+    });
 
-    // Assert
-})->throws(\InvalidArgumentException::class);
+    $mock->__construct($link);
+});
 
 test('is not executed if the queue is already at its maximum', function () {
     // Prepare

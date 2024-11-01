@@ -20,6 +20,10 @@ trait DownloadsContent
      */
     public function handle(): void
     {
+        if ($this->abandoned) {
+            return;
+        }
+
         $response = Http::get($this->getUrl());
 
         if (! $response->successful()) {

@@ -11,9 +11,9 @@ use App\Models\Page;
 
 class DownloadArchive extends AbstractJob
 {
-    use AbandonsQueueOnError;
-    use ChecksDownloadQueueSize;
     use DownloadsContent;
+    use ChecksDownloadQueueSize;
+    use AbandonsQueueOnError;
 
     protected string $url = BocUrl::Archive->value;
 

@@ -15,6 +15,10 @@ trait ExtractsLinks
      */
     public function handle(): void
     {
+        if ($this->abandoned) {
+            return;
+        }
+
         // Get and parse the page DOM
         $parsing = new GetParsedDom($this->page);
 
