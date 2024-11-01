@@ -14,7 +14,6 @@ class ExtractLinksFromBulletinIndex extends AbstractJob
 {
     use ExtractsLinks;
     use FiltersLinks;
-    use ReleasesLinkOnError;
 
     /**
      * Create a new job instance.
