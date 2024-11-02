@@ -16,7 +16,7 @@ class FollowLinksFoundInBulletinIndex extends AbstractJob
     use AbandonsQueueOnError;
 
     public function __construct(
-        protected int $limit = 150
+        protected int $limit = 50
     ) {
         if ($this->maxQueueSizeExceeded()) {
             $this->logAndDelete('The maximum number of downloads was reached, so a download job was ignored.');
@@ -32,11 +32,16 @@ class FollowLinksFoundInBulletinIndex extends AbstractJob
      */
     public function handle(): void
     {
+        if ($this->abandoned) {
+            return;
+        }
+
         $links = collect();
 
         DB::transaction(function () use (&$links) {
             $links = Link::foundIn(BocUrl::BulletinIndex)
                 ->notDownloaded()
+                ->notDownloadStarted()
                 ->notDisallowed()
                 ->orderBy('created_at')
                 ->limit($this->limit)
