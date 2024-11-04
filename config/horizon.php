@@ -184,13 +184,12 @@ return [
             'connection' => 'redis',
             'queue' => ['default', 'download', 'extract'],
             'balance' => 'auto',
-            'autoScalingStrategy' => 'time',
-            'maxProcesses' => 1,
-            'maxTime' => 0,
-            'maxJobs' => 0,
-            'memory' => 128,
+            'autoScalingStrategy' => 'size',
+            'minProcesses' => 1,
+            'maxProcesses' => 10,
+            'memory' => 512,
             'tries' => 1,
-            'timeout' => 60,
+            'timeout' => 15,
             'nice' => 0,
         ],
     ],
@@ -206,7 +205,7 @@ return [
 
         'local' => [
             'supervisor-1' => [
-                'maxProcesses' => 3,
+                'maxProcesses' => 10,
             ],
         ],
     ],

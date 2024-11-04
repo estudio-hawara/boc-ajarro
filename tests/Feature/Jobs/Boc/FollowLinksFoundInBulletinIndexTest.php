@@ -27,10 +27,10 @@ test('takes the next batch of links to process', function () {
         ->create(['url' => 'https://www.gobiernodecanarias.org/boc/archivo/1980/001/003.html']);
 
     // Act
-    FollowLinksFoundInBulletinIndex::dispatch(limit: 2)->handle();
+    FollowLinksFoundInBulletinIndex::dispatch()->handle();
 
     // Assert
-    Queue::assertPushed(DownloadBulletinArticle::class, 2);
+    Queue::assertPushed(DownloadBulletinArticle::class, 3);
 });
 
 test('doesn\'t dispatch any job if there are no bulletin article links waiting for download', function () {

@@ -15,9 +15,7 @@ class FollowLinksFoundInYearIndex extends AbstractJob
     use ChecksDownloadQueueSize;
     use AbandonsQueueOnError;
 
-    public function __construct(
-        protected int $limit = 50
-    ) {
+    public function __construct() {
         if ($this->maxQueueSizeExceeded()) {
             $this->logAndDelete('The maximum number of downloads was reached, so a download job was ignored.');
 
@@ -44,7 +42,7 @@ class FollowLinksFoundInYearIndex extends AbstractJob
                 ->notDownloadStarted()
                 ->notDisallowed()
                 ->orderBy('created_at')
-                ->limit($this->limit)
+                ->limit($this->getQueueCapacity())
                 ->get();
 
             Link::whereIn('id', $links->pluck('id'))
