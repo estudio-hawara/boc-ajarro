@@ -14,8 +14,8 @@ use Illuminate\Queue\Attributes\WithoutRelations;
 
 class DownloadBulletinArticle extends AbstractJob
 {
-    use DownloadsContent;
     use ChecksDownloadQueueSize;
+    use DownloadsContent;
     use ReleasesLinkOnError;
 
     protected string $url;

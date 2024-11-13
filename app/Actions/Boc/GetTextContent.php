@@ -106,14 +106,14 @@ class GetTextContent
 
     public function joinSplittedWord(string $text, string $verb): string
     {
-        $separated = join(' ', str_split($verb));
+        $separated = implode(' ', str_split($verb));
 
         if (strpos($text, "$separated:") !== false) {
-            $text = "$verb:\n\n" . trim(str_replace("$separated:", '', $text));
+            $text = "$verb:\n\n".trim(str_replace("$separated:", '', $text));
         }
 
         if (strpos($text, $separated) !== false) {
-            $text = "$verb:\n\n" . trim(str_replace($separated, '', $text));
+            $text = "$verb:\n\n".trim(str_replace($separated, '', $text));
         }
 
         return $text;

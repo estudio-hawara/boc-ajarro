@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\DB;
 
 class FollowLinksFoundInBulletinIndex extends AbstractJob
 {
-    use ChecksDownloadQueueSize;
     use AbandonsQueueOnError;
+    use ChecksDownloadQueueSize;
 
-    public function __construct() {
+    public function __construct()
+    {
         if ($this->maxQueueSizeExceeded()) {
             $this->logAndDelete('The maximum number of downloads was reached, so a download job was ignored.');
 
