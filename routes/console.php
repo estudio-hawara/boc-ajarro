@@ -3,6 +3,8 @@
 use App\Jobs;
 use Illuminate\Support\Facades\Schedule;
 
+if (app()->environment() == 'testing') return;
+
 Schedule::job(new Jobs\Boc\DownloadRobots)->dailyAt('00:00');
 Schedule::job(new Jobs\Boc\DownloadArchive)->dailyAt('00:05');
 Schedule::job(new Jobs\Boc\DownloadYearIndex(App\Models\Link::find(45)))->dailyAt('00:10');
