@@ -25,8 +25,8 @@ enum BocUrl: string
     public function pattern(): string
     {
         return match ($this) {
-            BocUrl::YearIndex => '/https:\/\/www.gobiernodecanarias.org\/boc(\/archivo)?\/(?P<year>\d{4,})(\/)?$/',
-            BocUrl::BulletinIndex => '/https:\/\/www.gobiernodecanarias.org\/boc(\/archivo)?\/(?P<year>\d{4,})\/(?P<bulletin>\d{3,})(\/)?$/',
+            BocUrl::YearIndex => '/https:\/\/www.gobiernodecanarias.org\/boc(\/archivo)?\/(?P<year>\d{4,})(\/)?(index.html)?$/',
+            BocUrl::BulletinIndex => '/https:\/\/www.gobiernodecanarias.org\/boc(\/archivo)?\/(?P<year>\d{4,})\/(?P<bulletin>\d{3,})(\/)?(index.html)?$/',
             BocUrl::BulletinArticle => '/https:\/\/www.gobiernodecanarias.org\/boc(\/archivo)?\/(?P<year>\d{4,})\/(?P<bulletin>\d{3,})\/(?P<article>\d{3,}).html$/',
             default => '/'.str_replace('/', '\/', rtrim($this->value, '/')).'/',
         };
